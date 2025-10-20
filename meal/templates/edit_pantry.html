@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Pantry</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="bg">
+<header>
+    <div class="header-row">
+        <h1>Edit Pantry</h1>
+        <a href="/camara" class="back-btn"><button class="main-btn small">Back to pantry</button></a>
+        <a href="/" style="position:absolute; left:30px; top:50%; transform:translateY(-50%);"><button class="main-btn small">Home</button></a>
+    </div>
+</header>
+<div class="overlay">
+    <div class="pantry-tables-container edit-context balanced-layout">
+        <div class="pantry-table equal-size">
+            <div class="table-header with-controls">
+                <h2>Ingredients</h2>
+                <div class="header-controls">
+                    <select id="ing-filter-tag" class="filter-select control-lg">
+                        <option value="__all__">All tags</option>
+                    </select>
+                    <select id="ing-sort-criteria" class="sort-select control-lg">
+                        <option value="alpha">Alphabetic</option>
+                        <option value="expiration">Expiration</option>
+                    </select>
+                </div>
+            </div>
+            <button id="add-ingredient" class="main-btn small add-under-title">Add Ingredient</button>
+            <table id="edit-ingredients-table" class="edit-table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Unit</th>
+                    <th>Tag</th>
+                    <th class="exp-col">Expiration<br><span class="format-hint">(DD-MM-YYYY)</span></th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody id="ingredients-body">
+                {% for ingredient in ingredients %}
+                <tr data-kind="ingredient" data-name="{{ ingredient.name }}">
+                    <td class="val name">{{ ingredient.name }}</td>
+                    <td class="val qty">{{ ingredient.default_quantity }}</td>
+                    <td class="val unit">{{ ingredient.unit }}</td>
+                    <td class="val tags">{{ ingredient.tags[0] if ingredient.tags else '' }}</td>
+                    <td class="val exp">{{ ingredient.data_expirare }}</td>
+                    <td class="actions">
+                        <button class="main-btn small edit-btn">Edit</button>
+                        <button class="main-btn small delete-btn danger">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="pantry-table equal-size">
+            <div class="table-header with-controls">
+                <h2>Cooked Recipes</h2>
+                <div class="header-controls">
+                    <select id="cooked-sort-criteria" class="sort-select control-lg">
+                        <option value="alpha">Alphabetic</option>
+                        <option value="servings">Servings</option>
+                        <option value="date">Date Cooked</option>
+                    </select>
+                </div>
+            </div>
+            <button id="add-cooked" class="main-btn small add-under-title">Add Cooked</button>
+            <table id="edit-cooked-table" class="edit-table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Servings</th>
+                    <th>Unit</th>
+                    <th>Date Cooked<br><span class="format-hint">(DD-MM-YYYY)</span></th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody id="cooked-body">
+                {% for cooked in cooked_recipes %}
+                <tr data-kind="cooked" data-name="{{ cooked.name }}">
+                    <td class="val name">{{ cooked.name }}</td>
+                    <td class="val servings">{{ cooked.servings }}</td>
+                    <td class="val unit">{{ cooked.unit }}</td>
+                    <td class="val date">{{ cooked.date_cooked }}</td>
+                    <td class="actions">
+                        <button class="main-btn small edit-btn">Edit</button>
+                        <button class="main-btn small delete-btn danger">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div id="toast-container" class="toast-container"></div>
+    </div>
+</div>
+<script src="/static/pantry_edit.js"></script>
+</body>
+</html>

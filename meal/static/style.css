@@ -1,0 +1,462 @@
+body.bg {
+    /* Revert to original background with image + cover */
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: url('/static/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: Arial, sans-serif;
+}
+
+.header-row {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the title horizontally */
+    width: 100%;
+    background: rgba(255,255,255,0.95);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    padding: 20px 0 10px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    position: relative; /* For absolute button positioning */
+}
+.back-btn {
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 0;
+}
+h1 {
+    font-size: 2.5em;
+    margin: 0;
+    color: #333;
+    text-align: center; /* Ensure text is centered */
+    width: 100%;
+}
+.overlay {
+    /* Revert: whitish transparent background, no frame */
+    /* remove border & extra shadow added earlier */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 100px;
+    overflow-y: auto;
+    height: 100vh;
+}
+.main-btn {
+    padding: 20px 0;
+    width: 350px;
+    font-size: 1.3em;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 20px 0 0 0;
+    display: block;
+}
+.main-btn:hover {
+    background: #388E3C;
+}
+.main-btn.small {
+    width: auto;
+    padding: 10px 20px;
+    font-size: 1em;
+}
+.sort-bar {
+    margin-bottom: 30px;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.center-sort {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+}
+.recipes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 100%;
+    align-items: center;
+}
+.recipes-row {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+    width: 100%;
+    justify-content: center;
+}
+.recipe-card {
+    background: #f7f7f7;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 30px 25px;
+    font-size: 1.25em;
+    color: #222;
+}
+.recipe-card.large {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    padding: 32px;
+    margin: 0 0 16px 0;
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 420px;
+}
+.recipe-card-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 220px;
+    margin-right: 32px;
+}
+.recipe-image img {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    background: #f5f5f5;
+}
+.recipe-title {
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-top: 16px;
+    text-align: center;
+}
+.recipe-card-right {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+}
+.ingredients-table {
+    border-collapse: collapse;
+    width: 100%;
+    background: #fafafa;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.ingredients-table th, .ingredients-table td {
+    border: 1px solid #e0e0e0;
+    padding: 10px 18px;
+    text-align: left;
+    font-size: 1em;
+}
+.ingredients-table th {
+    background: #e8f5e9;
+    font-weight: bold;
+}
+.recipe-servings, .recipe-ingredients {
+    margin-bottom: 6px;
+}
+.pantry-tables-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px;
+    max-width: 1500px; /* was 1100px; give room for side panel */
+    margin: 0 auto 40px auto;
+    width: 100%;
+}
+.pantry-table {
+    /* Revert: no explicit border - keep the existing shadow only */
+    background: rgba(255,255,255,0.95);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    min-width: 350px;
+    max-width: 500px;
+    vertical-align: top;
+}
+.pantry-table.wide { max-width: 680px; width: 100%; }
+.pantry-table table { table-layout: auto; }
+.pantry-table table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+.pantry-table th, .pantry-table td {
+    padding: 8px 12px;
+    text-align: left;
+    background: transparent;
+}
+.pantry-table th {
+    background: #f0f0f0;
+}
+.pantry-table tr:nth-child(even) {
+    background: #fafafa;
+}
+.center-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.main-btns-row {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+}
+.header-controls { display:flex; gap:14px; align-items:center; }
+.with-controls { display:flex; justify-content:space-between; align-items:center; }
+.filter-select.control-lg, .sort-select.control-lg { padding:10px 18px; font-size:0.95em; border:1px solid #4CAF50; border-radius:8px; background:#ffffffee; cursor:pointer; }
+.filter-select.control-lg:focus, .sort-select.control-lg:focus { outline:2px solid #4CAF50; }
+.filter-select.control-lg:hover, .sort-select.control-lg:hover { border-color:#388E3C; }
+.add-under-title { margin-top:4px; }
+/* Modal styles */
+.modal { position: fixed; z-index: 100; left:0; top:0; width:100%; height:100%; background: rgba(0,0,0,0.55); display:flex; align-items:center; justify-content:center; }
+.modal-content { background:#fff; padding:25px 30px; border-radius:12px; width:360px; max-width:90vw; box-shadow:0 4px 18px rgba(0,0,0,0.18); position:relative; }
+.close-modal { position:absolute; right:14px; top:10px; font-size:24px; cursor:pointer; }
+.field-group label { display:block; margin:8px 0 4px 0; font-size:0.95em; }
+.field-group input { width:100%; padding:8px 10px; border:1px solid #ccc; border-radius:6px; }
+.modal-content h2 { margin-top:0; }
+.table-editing-row { background:#fff9e0 !important; }
+button.delete-row { background:#c62828; }
+button.delete-row:hover { background:#8e0000; }
+/* End modal styles */
+/* Inline editing helpers */
+.inline-input { width:100%; box-sizing:border-box; padding:4px 6px; border:1px solid #4CAF50; border-radius:4px; font-size:0.9em; background:#fff; }
+.inline-input:focus { outline:2px solid #4CAF50; }
+tr.being-edited { background:#fff7d6 !important; box-shadow: inset 0 0 0 2px #4CAF50; }
+.main-btn.danger { background:#d32f2f; }
+.main-btn.danger:hover { background:#9a0007; }
+.main-btn.secondary { background:#757575; }
+.main-btn.secondary:hover { background:#545454; }
+.edit-table td, .edit-table th { vertical-align: top; }
+/* End inline editing helpers */
+/* Toast notifications */
+.toast-container { position:fixed; top:90px; right:25px; z-index:100; display:flex; flex-direction:column; gap:10px; }
+.toast { background:#323232; color:#fff; padding:12px 18px; border-radius:8px; font-size:.85em; box-shadow:0 4px 14px rgba(0,0,0,.3); opacity:0; transform:translateY(-6px); animation:toastIn .25s forwards; }
+.toast.success { background:#2e7d32; }
+.toast.error { background:#c62828; }
+@keyframes toastIn { to { opacity:1; transform:translateY(0);} }
+.toast.hide { animation:toastOut .3s forwards; }
+@keyframes toastOut { to { opacity:0; transform:translateY(-6px);} }
+.pantry-table th.exp-col, .pantry-table td.val.exp { width:170px; }
+.pantry-table th.exp-col { white-space:nowrap; }
+.pantry-table td.val.exp { white-space:nowrap; }
+/* Extra spacing between edit tables */
+.pantry-tables-container { gap:70px; flex-wrap:wrap; }
+@media (max-width:1200px){
+  .pantry-tables-container { flex-direction:column; gap:60px; }
+  .pantry-table { max-width:700px; width:100%; }
+}
+
+/* Modal styling */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+}
+.modal-content {
+  background: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 30%;
+  text-align: center;
+  box-shadow: 0px 4px 8px rgba(0,0,0,0.3);
+  animation: popIn 0.3s ease-out;
+}
+@keyframes popIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.close {
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Ensure tables have full white background coverage */
+.pantry-table table { background:#fff; }
+.pantry-table td, .pantry-table th { background:transparent; }
+
+/* Expanded form row styling */
+.edit-form-row td { background:#fdfdfd; padding:18px 20px; border:1px solid #d9d9d9; border-top:none; }
+tr.being-edited + .edit-form-row td { border-top:2px solid #4CAF50; }
+.edit-form { display:grid; grid-template-columns: repeat(auto-fit,minmax(180px, 1fr)); gap:18px 26px; }
+.edit-form .edit-field { display:flex; flex-direction:column; }
+.edit-form .edit-field label { font-size:.8em; font-weight:600; margin-bottom:4px; letter-spacing:.5px; text-transform:uppercase; color:#444; }
+.edit-form .edit-field input { padding:8px 10px; border:1px solid #bbb; border-radius:6px; font-size:.95em; }
+.edit-form .edit-field input:focus { outline:2px solid #4CAF50; border-color:#4CAF50; }
+.edit-actions { display:flex; flex-wrap:wrap; gap:10px; align-items:flex-end; }
+.edit-actions .main-btn { margin:0; }
+
+/* Larger gap & subtle divider between the two tables */
+.pantry-tables-container { gap:90px; position:relative; }
+.pantry-tables-container:before { content:""; position:absolute; left:50%; top:0; bottom:0; width:2px; background:rgba(0,0,0,0.05); transform:translateX(-50%); pointer-events:none; }
+@media (max-width:1400px){ .pantry-tables-container:before { display:none; } }
+@media (max-width:1200px){ .pantry-tables-container { flex-direction:column; gap:70px; } }
+
+/* Subtle elevation for active row */
+tr.being-edited { background:#eef9f0 !important; box-shadow:0 0 0 2px #4CAF50 inset; }
+
+/* Balanced layout adjustments */
+.balanced-layout { justify-content:center; gap:80px; }
+.pantry-table.equal-size { max-width:560px; flex:0 0 560px; }
+@media (max-width:1250px){
+  .balanced-layout { flex-direction:column; align-items:center; }
+  .pantry-table.equal-size { max-width:720px; width:100%; }
+}
+.format-hint { font-size:.65em; font-weight:400; color:#666; letter-spacing:.5px; }
+/* Remove older wide override effects */
+.pantry-table.wide { max-width:560px; }
+.table-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.table-header h2 { margin:0; }
+.table-header .inline-add { margin:0; align-self:center; }
+.table-header .inline-add.main-btn.small { padding:8px 18px; }
+/* Expiry panel styles */
+.expiry-panel { position:fixed; top:90px; left:15px; z-index:50; background:rgba(255,255,255,0.95); padding:14px 16px 10px 16px; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.12); max-width:300px; backdrop-filter:blur(4px); border:1px solid #d5d5d5; }
+.expiry-header { font-weight:700; margin:0 0 8px 0; font-size:1em; color:#2e7d32; display:flex; align-items:center; gap:6px; }
+.expiry-table { width:100%; border-collapse:collapse; font-size:0.78em; }
+.expiry-table th, .expiry-table td { padding:4px 6px; text-align:left; border-bottom:1px solid #e2e2e2; }
+.expiry-table th { background:#e8f5e9; font-weight:600; font-size:0.75rem; text-transform:uppercase; letter-spacing:.5px; }
+.expiry-table tr:last-child td { border-bottom:none; }
+.expiry-table td { white-space:nowrap; }
+.expiry-table td:nth-child(1){ font-weight:600; }
+@media (max-width:900px){ .expiry-panel { position:static; margin:0 15px 20px 15px; max-width:none; } }
+/* Scrollable variant */
+.expiry-panel.scrollable { max-height:360px; display:flex; flex-direction:column; }
+.expiry-panel .expiry-scroll { overflow-y:auto; overflow-x:hidden; scrollbar-width:thin; max-height:300px; }
+.expiry-panel .expiry-scroll::-webkit-scrollbar { width:8px; }
+.expiry-panel .expiry-scroll::-webkit-scrollbar-track { background:transparent; }
+.expiry-panel .expiry-scroll::-webkit-scrollbar-thumb { background:#b5d8b6; border-radius:4px; }
+.expiry-panel .expiry-scroll::-webkit-scrollbar-thumb:hover { background:#8fcf92; }
+/* End scrollable variant */
+/* === My Pantry layout adjustments to avoid overlap with expiry panel === */
+body.pantry-page .pantry-tables-container { gap:30px; max-width:1420px; }
+body.pantry-page .pantry-table { max-width:440px; }
+/* Reserve space on the right only if expiry panel exists/active */
+body.pantry-page.has-expiry .pantry-tables-container { margin-right:360px; }
+/* When no panel (hidden), allow full width */
+body.pantry-page:not(.has-expiry) .pantry-tables-container { margin-right:0; }
+@media (max-width:1400px) {
+  body.pantry-page.has-expiry .pantry-tables-container { margin-right:300px; }
+  body.pantry-page .pantry-table { max-width:420px; }
+}
+@media (max-width:1100px) {
+  body.pantry-page.has-expiry .pantry-tables-container { margin-right:0; }
+  body.pantry-page .pantry-tables-container { flex-direction:column; align-items:stretch; }
+  body.pantry-page .pantry-table { max-width:100%; }
+}
+/* ====== CLEAN LAYOUT SECTION FOR PANTRY PAGE (single source of truth) ====== */
+/* Remove previous multiple blocks for .pantry-grid / .pantry-col-* / axis.
+   Keep only this final, narrower and symmetric set. */
+/* (All older blocks for: .pantry-grid with 780/760/740 widths, .pantry-col-left/right spacing, and enforced overrides have been removed.) */
+body.pantry-page .pantry-grid {
+  --table-width: 520px;   /* width of each panel */
+  --axis-width: 2px;      /* axis thickness */
+  --axis-gap: 24px;       /* gap between axis and each panel */
+  display: grid;
+  grid-template-columns: var(--table-width) var(--axis-width) var(--table-width);
+  column-gap: var(--axis-gap);
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto 60px auto;
+  position: relative;
+  box-sizing: border-box;
+  padding: 0;
+}
+body.pantry-page .pantry-grid .center-axis-line {
+  width: var(--axis-width);
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.15) 10%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.15) 90%, rgba(0,0,0,0) 100%);
+  border-radius:1px;
+}
+body.pantry-page .pantry-col-left,
+body.pantry-page .pantry-col-right { margin:0; padding:0; }
+body.pantry-page .pantry-grid .pantry-table.equal-size { width:100%; max-width:100%; box-sizing:border-box; }
+body.pantry-page .pantry-grid .pantry-table.equal-size table { width:100%; table-layout:auto; }
+#view-ingredients-table th.exp-col, #view-ingredients-table td.exp { width:150px; white-space:nowrap; }
+#view-cooked-table th:nth-child(4), #view-cooked-table td.date { width:160px; white-space:nowrap; }
+@media (max-width:1400px){ body.pantry-page .pantry-grid { --table-width:500px; --axis-gap:22px; } }
+@media (max-width:1320px){ body.pantry-page .pantry-grid { --table-width:480px; --axis-gap:20px; } }
+@media (max-width:1260px){ body.pantry-page .pantry-grid { --table-width:460px; --axis-gap:18px; } }
+@media (max-width:1200px){
+  body.pantry-page .pantry-grid { display:flex; flex-direction:column; gap:50px; }
+  body.pantry-page .pantry-grid .center-axis-line { display:none; }
+  body.pantry-page .pantry-grid .pantry-table.equal-size { max-width:620px; }
+  #view-ingredients-table th.exp-col, #view-ingredients-table td.exp { width:140px; }
+}
+/* Debug visual line (disabled): */
+/* body.pantry-page .pantry-grid { outline:1px dashed #d33; } */
+/* ====== END CLEAN LAYOUT SECTION ====== */
+
+/* === Recipes dynamic grid (2-6 columns) === */
+.recipes-grid {
+  display:grid;
+  grid-template-columns:repeat(var(--recipe-cols,2), 1fr);
+  gap:34px 34px;
+  width:100%;
+  max-width:1800px;
+  margin:0 auto 60px auto;
+  align-items:start;
+}
+/* Ensure cards stretch to grid cell and remove old max-width restriction */
+.recipes-grid .recipe-card.large { width:100%; max-width:100%; }
+/* When many columns, tighten padding slightly for better fit */
+.recipes-grid[data-cols="5"] .recipe-card.large,
+.recipes-grid[data-cols="6"] .recipe-card.large { padding:24px 20px; }
+/* Vertical stacking for dense layouts (5-6 columns) */
+.recipes-grid[data-cols="5"] .recipe-card.large,
+.recipes-grid[data-cols="6"] .recipe-card.large { flex-direction:column; }
+.recipes-grid[data-cols="5"] .recipe-card-left,
+.recipes-grid[data-cols="6"] .recipe-card-left { width:100%; margin-right:0; margin-bottom:12px; }
+.recipes-grid[data-cols="5"] .recipe-image img,
+.recipes-grid[data-cols="6"] .recipe-image img { width:100%; max-width:200px; height:auto; }
+.recipes-grid[data-cols="5"] .recipe-card-right,
+.recipes-grid[data-cols="6"] .recipe-card-right { width:100%; }
+/* Compact buttons for tight columns */
+.recipes-grid[data-cols="5"] .main-btn.small,
+.recipes-grid[data-cols="6"] .main-btn.small { font-size:0.65rem; padding:4px 12px; }
+/* === End vertical stacking adjustments === */
+/* Responsive safeguard: on narrow screens force fewer columns */
+@media (max-width:1400px){ .recipes-grid { max-width:1400px; } }
+@media (max-width:1200px){ .recipes-grid { grid-template-columns:repeat(min(var(--recipe-cols,2),4), 1fr); } }
+@media (max-width:1000px){ .recipes-grid { grid-template-columns:repeat(min(var(--recipe-cols,2),3), 1fr); } }
+@media (max-width:760px){ .recipes-grid { grid-template-columns:repeat(min(var(--recipe-cols,2),2), 1fr); } }
+/* === End recipes dynamic grid === */
+
+/* Recommendation banner left-aligned */
+.rec-info-banner {
+  position:absolute;
+  left:30px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:0.85rem;
+  line-height:1.25;
+  max-width:320px;
+  color:#2f4733;
+  font-weight:500;
+  background:rgba(255,255,255,0.7);
+  padding:6px 10px;
+  border-radius:8px;
+  box-shadow:0 1px 3px rgba(0,0,0,0.08);
+}
+@media (max-width:900px){
+  .rec-info-banner { font-size:0.75rem; max-width:240px; }
+}
+@media (max-width:650px){
+  .rec-info-banner { display:none; }
+}

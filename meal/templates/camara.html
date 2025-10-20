@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Pantry</title>
+    <link rel="stylesheet" href="/static/style.css?ts={{ time }}">
+    <link rel="stylesheet" href="/static/index.css?ts={{ time }}">
+</head>
+<body class="bg pantry-page">
+<header>
+    <div class="header-row">
+        <div class="header-actions" style="position:absolute; left:30px; top:50%; transform:translateY(-50%); display:flex; gap:12px; align-items:center;">
+            <a href="/" ><button class="main-btn small">Back to home page</button></a>
+            <a href="/pantry/edit"><button class="main-btn small secondary">Edit Pantry</button></a>
+        </div>
+        <h1>My Pantry</h1>
+    </div>
+</header>
+
+{% set exp_count = expiring_soon|length if expiring_soon else 0 %}
+{% set low_count = low_stock_items|length if low_stock_items else 0 %}
+{% set total_alerts = exp_count + low_count %}
+
+{% if total_alerts > 0 %}
+<div class="alerts-entry" id="alertsEntryBar" style="position:absolute; top:10px; right:30px; z-index:1800;">
+    <button id="alertsMainBtn" class="alerts-toggle-btn" data-total="{{ total_alerts }}">Show alerts</button>
+</div>
+<div id="alertsPanel" class="alerts-panel" aria-hidden="true">
+    <div class="alerts-header">
+        <div class="ah-left">
+            <strong>Alerts</strong>
+            <span class="total-badge" id="alertsPanelTotal">{{ total_alerts }}</span>
+        </div>
+        <div class="ah-right">
+            <button class="hide-all-btn" id="hideAlertsBtn" title="Hide alerts">×</button>
+        </div>
+    </div>
+    <div class="alerts-tabs" id="alertsTabs">
+        {% if exp_count > 0 %}
+        <button class="alerts-tab active" data-tab="expiring">Expiring <span class="tab-badge" id="expTabCount">{{ exp_count }}</span></button>
+        {% endif %}
+        {% if low_count > 0 %}
+        <button class="alerts-tab {% if exp_count == 0 %}active{% endif %}" data-tab="lowstock">Low stock <span class="tab-badge" id="lowTabCount">{{ low_count }}</span></button>
+        {% endif %}
+    </div>
+    <div class="alerts-content">
+        {% if exp_count > 0 %}
+        <div class="alerts-list" data-content="expiring" style="display:block;">
+            <div class="alerts-table-wrapper"><table class="alerts-table">
+                <thead><tr><th style="width:32px;"><input type="checkbox" id="expSelectAll" title="Select all"></th><th>Name</th><th>Qty</th><th>Exp</th><th>Left</th></tr></thead>
+                <tbody>
+                {% for item in expiring_soon %}
+                    <tr data-name="{{ item.name }}" class="{% if item.days_left < 0 %}sev-expired{% elif item.days_left == 0 %}sev-0{% elif item.days_left == 1 %}sev-1{% else %}sev-23{% endif %}">
+                        <td><input type="checkbox" class="exp-select" data-name="{{ item.name }}" /></td>
+                        <td class="ex-name">{{ item.name }}</td>
+                        <td>{{ item.quantity }} {{ item.unit }}</td>
+                        <td>{{ item.exp }}</td>
+                        <td>
+                            {% if item.days_left < 0 %}Expired
+                            {% elif item.days_left == 0 %}Today
+                            {% elif item.days_left == 1 %}1 day
+                            {% else %}{{ item.days_left }} days
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table></div>
+        </div>
+        {% endif %}
+        {% if low_count > 0 %}
+        <div class="alerts-list" data-content="lowstock" style="display:{% if exp_count == 0 %}block{% else %}none{% endif %};">
+            <div class="alerts-table-wrapper"><table class="alerts-table">
+                <thead><tr><th>Name</th><th>Qty</th><th>Thr</th><th>Tag</th></tr></thead>
+                <tbody>
+                {% for item in low_stock_items %}
+                    {% set ratio = (item.quantity / item.threshold) if item.threshold else 1 %}
+                    <tr class="{% if ratio <= 0.2 %}sev-0{% elif ratio <= 0.5 %}sev-1{% else %}sev-23{% endif %}">
+                        <td class="ex-name">{{ item.name }}</td>
+                        <td>{{ item.quantity }} {{ item.unit }}</td>
+                        <td>{{ item.threshold }} {{ item.unit }}</td>
+                        <td>{{ item.tag }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table></div>
+        </div>
+        {% endif %}
+    </div>
+    <div class="alerts-footer">
+        <button id="bulkDeleteExp" class="mini-hide-btn danger" style="background:#c62828;" disabled>Delete selected</button>
+        <button id="hideBothBtn" class="mini-hide-btn">Hide both</button>
+    </div>
+</div>
+{% endif %}
+
+<div class="overlay">
+    <div class="pantry-grid view-context" data-allowed-tags="fruits,vegetables,meat-chicken,meat-beef,meat-pork,pasta,frozen,fish,seafood,dairy,cheese,condiment,baking,canned,grains,oil,sauce,spice,other">
+        <div class="pantry-col-left">
+            <div class="pantry-table equal-size">
+                <div class="table-header with-controls">
+                    <h2>Pantry Ingredients</h2>
+                    <div class="header-controls">
+                        <select id="view-ing-filter-tag" class="filter-select control-lg">
+                            <option value="__all__">All tags</option>
+                        </select>
+                        <select id="view-ing-sort" class="sort-select control-lg">
+                            <option value="alpha">Alphabetic</option>
+                            <option value="expiration">Expiration</option>
+                        </select>
+                    </div>
+                </div>
+                <table id="view-ingredients-table" class="view-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Quantity</th>
+                            <th>Unit</th>
+                            <th>Tag</th>
+                            <th class="exp-col">Expiration<br><span class="format-hint">(DD-MM-YYYY)</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="view-ingredients-body">
+                        {% for ingredient in ingredients %}
+                        <tr>
+                            <td class="name">{{ ingredient.name }}</td>
+                            <td>{{ ingredient.default_quantity }}</td>
+                            <td>{{ ingredient.unit }}</td>
+                            <td class="tag">{{ ingredient.tags[0] if ingredient.tags else '' }}</td>
+                            <td class="exp">{{ ingredient.data_expirare }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="center-axis-line" aria-hidden="true"></div>
+        <div class="pantry-col-right">
+            <div class="pantry-table equal-size">
+                <div class="table-header with-controls">
+                    <h2>Cooked Recipes</h2>
+                    <div class="header-controls">
+                        <select id="view-cooked-sort" class="sort-select control-lg">
+                            <option value="alpha">Alphabetic</option>
+                            <option value="servings">Servings</option>
+                            <option value="date">Date Cooked</option>
+                        </select>
+                    </div>
+                </div>
+                <table id="view-cooked-table" class="view-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Servings</th>
+                            <th>Unit</th>
+                            <th>Date Cooked<br><span class="format-hint">(DD-MM-YYYY)</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="view-cooked-body">
+                        {% for cooked in cooked_recipes %}
+                        <tr>
+                            <td class="name">{{ cooked.name }}</td>
+                            <td class="servings">{{ cooked.servings }}</td>
+                            <td class="unit">{{ cooked.unit }}</td>
+                            <td class="date">{{ cooked.date_cooked }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/pantry_view.js"></script>
+
+<style>
+/* Unified alerts styles copied from index for consistency */
+.alerts-toggle-btn { background:#2c3e50; color:#fff; border:none; padding:8px 16px; border-radius:24px; cursor:pointer; font-size:0.85rem; box-shadow:0 4px 12px rgba(0,0,0,0.25); }
+.alerts-toggle-btn:hover { background:#1d2833; }
+.alerts-panel { position:fixed; top:60px; right:0; width:370px; max-width:90%; background:rgba(255,255,255,0.97); backdrop-filter:blur(4px); box-shadow:-6px 0 18px -4px rgba(0,0,0,0.35); border-left:1px solid #ddd; border-top-left-radius:14px; border-bottom-left-radius:14px; z-index:2200; transform:translateX(110%); transition:transform .35s ease; display:flex; flex-direction:column; max-height:calc(100% - 80px); }
+.alerts-panel.open { transform:translateX(0); }
+.alerts-header { display:flex; justify-content:space-between; align-items:center; padding:10px 14px 6px 18px; border-bottom:1px solid #eee; }
+.alerts-header .total-badge { background:#ff9800; color:#fff; font-size:0.65rem; padding:4px 7px; border-radius:12px; margin-left:6px; }
+.alerts-tabs { display:flex; gap:6px; padding:8px 12px 4px 12px; flex-wrap:wrap; }
+.alerts-tab { background:#f1f1f1; border:none; padding:6px 12px; border-radius:18px; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.5px; cursor:pointer; display:flex; align-items:center; gap:6px; }
+.alerts-tab.active { background:#ff9800; color:#fff; }
+.alerts-tab .tab-badge { background:rgba(0,0,0,0.2); color:#fff; padding:2px 6px; border-radius:10px; font-size:0.6rem; }
+.alerts-tab.active .tab-badge { background:rgba(255,255,255,0.25); }
+.alerts-content { padding:4px 12px 10px 12px; overflow-y:auto; }
+.alerts-content table { width:100%; border-collapse:collapse; font-size:0.75rem; }
+.alerts-content th { text-align:left; background:#ff9800; color:#fff; padding:6px 8px; font-weight:600; position:sticky; top:0; }
+.alerts-content td { padding:4px 8px; border-bottom:1px solid #eee; }
+.alerts-list { animation: fadeIn .25s ease; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(4px);} to { opacity:1; transform:translateY(0);} }
+.hide-all-btn { background:transparent; border:none; font-size:1.2rem; line-height:1; cursor:pointer; color:#555; padding:2px 6px; border-radius:6px; }
+.hide-all-btn:hover { background:#eee; }
+.mini-hide-btn { background:#2c3e50; color:#fff; border:none; padding:6px 14px; border-radius:18px; cursor:pointer; font-size:0.65rem; }
+.mini-hide-btn:hover { background:#18222b; }
+.alerts-footer { padding:6px 12px 12px 12px; border-top:1px solid #eee; text-align:right; }
+.sev-expired { background:#ffebee; }
+.sev-0 { background:#ffe0b2; }
+.sev-1 { background:#fff3cd; }
+.sev-23 { background:#f1f8e9; }
+.alerts-table-wrapper { position:relative; overflow-y:auto; max-height:220px; }
+.alerts-table-wrapper::-webkit-scrollbar { width:6px; }
+.alerts-table-wrapper::-webkit-scrollbar-thumb { background:#bbb; border-radius:4px; }
+.alerts-table-wrapper::-webkit-scrollbar-thumb:hover { background:#999; }
+.alerts-content::-webkit-scrollbar { width:8px; }
+.alerts-content::-webkit-scrollbar-track { background:transparent; }
+.alerts-content::-webkit-scrollbar-thumb { background:#ccc; border-radius:4px; }
+.alerts-content::-webkit-scrollbar-thumb:hover { background:#bbb; }
+</style>
+
+<script>
+(function(){
+  const PANEL_KEY = 'pantryAlertsPanelHidden'; // separate key for pantry page
+  const TAB_KEY = 'pantryAlertsActiveTab';
+  const panel = document.getElementById('alertsPanel');
+  const btn = document.getElementById('alertsMainBtn');
+  if(!panel || !btn) return;
+  const total = btn.getAttribute('data-total');
+
+  function limitAlertTables(){
+    const wrappers = panel.querySelectorAll('.alerts-table-wrapper');
+    wrappers.forEach(w => {
+      const table = w.querySelector('table');
+      if(!table) return;
+      const headerRow = table.querySelector('thead tr');
+      const bodyRows = table.querySelectorAll('tbody tr');
+      if(!bodyRows.length || !headerRow) return;
+      w.style.maxHeight = '';
+      const headerH = headerRow.getBoundingClientRect().height || 30;
+      const firstH = bodyRows[0].getBoundingClientRect().height || 26;
+      const visible = Math.min(5, bodyRows.length);
+      const target = headerH + firstH * visible + 2;
+      w.style.maxHeight = target + 'px';
+      w.style.overflowY = (bodyRows.length > 5) ? 'auto' : 'hidden';
+    });
+  }
+
+  function setButtonLabel(open){ btn.innerHTML = open ? 'Alerts (<span>'+ total +'</span>)' : 'Show alerts'; }
+  function openPanel(){ panel.classList.add('open'); panel.setAttribute('aria-hidden','false'); localStorage.setItem(PANEL_KEY,'0'); setButtonLabel(true); setTimeout(limitAlertTables,40); }
+  function closePanel(){ panel.classList.remove('open'); panel.setAttribute('aria-hidden','true'); localStorage.setItem(PANEL_KEY,'1'); setButtonLabel(false); }
+  function toggle(){ panel.classList.contains('open') ? closePanel() : openPanel(); }
+  btn.addEventListener('click', toggle);
+  const hideBtn = document.getElementById('hideAlertsBtn'); if(hideBtn) hideBtn.addEventListener('click', closePanel);
+  const hideBoth = document.getElementById('hideBothBtn'); if(hideBoth) hideBoth.addEventListener('click', closePanel);
+  const tabs = Array.from(panel.querySelectorAll('.alerts-tab'));
+  function activateTab(name){
+    tabs.forEach(t=>t.classList.toggle('active', t.dataset.tab===name));
+    panel.querySelectorAll('.alerts-list').forEach(l=>{ l.style.display = (l.getAttribute('data-content')===name)?'block':'none'; });
+    localStorage.setItem(TAB_KEY,name);
+    setTimeout(limitAlertTables,20);
+  }
+  tabs.forEach(t=>t.addEventListener('click',()=>activateTab(t.dataset.tab)));
+  window.addEventListener('resize', limitAlertTables);
+  document.addEventListener('DOMContentLoaded', limitAlertTables);
+  const hidden = localStorage.getItem(PANEL_KEY) === '1';
+  if(!hidden) setTimeout(openPanel,40); else setButtonLabel(false);
+  const savedTab = localStorage.getItem(TAB_KEY);
+  if(savedTab && tabs.some(t=>t.dataset.tab===savedTab)) activateTab(savedTab); else if(tabs.length) activateTab(tabs[0].dataset.tab);
+})();
+</script>
+<script>
+(function(){
+  const bulkBtn = document.getElementById('bulkDeleteExp');
+  const selectAll = document.getElementById('expSelectAll');
+  if(!bulkBtn) return;
+  function updateState(){
+    const checks = Array.from(document.querySelectorAll('.exp-select'));
+    const sel = checks.filter(c=>c.checked);
+    bulkBtn.disabled = sel.length === 0;
+    if(selectAll){
+      const allChecked = sel.length && sel.length === checks.length;
+      selectAll.checked = allChecked;
+      selectAll.indeterminate = sel.length>0 && sel.length < checks.length;
+    }
+  }
+  document.addEventListener('change', (e)=>{
+    if(e.target.classList && e.target.classList.contains('exp-select')) updateState();
+    if(e.target === selectAll){
+      const val = selectAll.checked;
+      document.querySelectorAll('.exp-select').forEach(cb=> cb.checked = val);
+      updateState();
+    }
+  });
+  bulkBtn.addEventListener('click', async ()=>{
+    const names = Array.from(document.querySelectorAll('.exp-select:checked')).map(c=>c.getAttribute('data-name')).filter(Boolean);
+    if(!names.length) return;
+    if(!confirm('Delete selected ingredients?')) return;
+    try {
+      const resp = await fetch('/api/pantry/ingredients/bulk-delete', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({names})});
+      if(!resp.ok){ alert('Delete failed'); return; }
+      const data = await resp.json();
+      // Remove deleted rows from DOM
+      data.deleted.forEach(n=>{
+         const row = document.querySelector(`tr[data-name="${CSS.escape(n)}"]`);
+         if(row) row.remove();
+      });
+      // Recompute counters
+      const totalBadge = document.getElementById('alertsPanelTotal');
+      if(totalBadge){
+         const remainingExp = document.querySelectorAll('.exp-select').length;
+         // total alerts = remaining exp + existing low stock rows
+         const lowRows = document.querySelectorAll('[data-content="lowstock"] tbody tr').length;
+         totalBadge.textContent = remainingExp + lowRows;
+         const expTabCount = document.getElementById('expTabCount'); if(expTabCount) expTabCount.textContent = remainingExp;
+         if(remainingExp === 0){
+            // Hide expiring tab/list
+            const expList = document.querySelector('.alerts-list[data-content="expiring"]');
+            if(expList) expList.style.display='none';
+         }
+      }
+      updateState();
+    } catch(err){
+      console.error(err); alert('Unexpected error');
+    }
+  });
+  updateState();
+})();
+</script>
+</body>
+</html>

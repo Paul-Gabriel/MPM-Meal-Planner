@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping List - Week {{ week }}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" type="image/png" href="/static/icons/logo.png">
+    <style>
+        body { font-family: Arial, sans-serif; background: #f5f5f5; margin:0; }
+        .container { max-width: 980px; margin: 40px auto; background: #fff; padding: 30px 40px; border-radius: 18px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); }
+        h1 { margin-top:0; }
+        table { width:100%; border-collapse: collapse; }
+        th, td { padding: 8px 10px; border-bottom:1px solid #eee; text-align:left; }
+        th { background:#2c3e50; color:#fff; position: sticky; top:0; }
+        tr:hover { background:#fafafa; }
+        .badge { display:inline-block; background:#FF9800; color:#fff; padding:4px 10px; border-radius:20px; font-size: 0.75em; }
+        a.button, button.button { text-decoration:none; background:#2c3e50; color:#fff; padding:9px 16px; border-radius:26px; font-weight:600; transition:.2s; border:none; cursor:pointer; }
+        a.button:hover, button.button:hover { background:#1b2730; }
+        .small-btn { padding:4px 10px; font-size:0.7rem; border-radius:14px; }
+        .row-editing { background:#fffde7 !important; }
+        .qty-input { width:70px; padding:4px 6px; font-size:0.8rem; border:1px solid #ccc; border-radius:6px; }
+        .actions-cell { white-space:nowrap; }
+        .undo-btn { background:#795548; }
+        .undo-btn:hover { background:#5d4037; }
+        .disabled { opacity:0.45; cursor:not-allowed; }
+        .msg-bar { display:none; padding:10px 14px; border-radius:8px; margin-bottom:14px; font-size:0.85em; font-weight:600; }
+        .legend { font-size:0.78em; color:#666; margin-top:12px; }
+        .footer-links { margin-top:30px; display:flex; gap:15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-actions" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <h1 style="font-size:1.4rem;">Shopping List <span class="badge">{{ total_items }} items</span></h1>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <a class="button" href="/">⬅ Back</a>
+                <a class="button" href="/pantry">My Pantry</a>
+                <button id="undoBtn" class="button undo-btn disabled" title="Undo last purchase" disabled>Undo</button>
+                <button id="buyBtn" class="button" style="background:#2e7d32;" disabled>Bought</button>
+            </div>
+        </div>
+
+        <div id="msgBar" class="msg-bar"></div>
+
+        {% if shopping_list|length == 0 %}
+            <div class="empty">All required ingredients are already in your pantry. 🎉</div>
+        {% else %}
+        <form id="shoppingForm" onsubmit="return false;">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:3%;"><input type="checkbox" id="masterCheck" title="Select/Deselect All"/></th>
+                    <th style="width:26%">Ingredient</th>
+                    <th style="width:10%">Have</th>
+                    <th style="width:11%">Required</th>
+                    <th style="width:11%">Missing</th>
+                    <th style="width:11%">Buy Qty</th>
+                    <th style="width:14%">Expiration</th>
+                    <th style="width:7%">Unit</th>
+                    <th style="width:7%">Edit</th>
+                </tr>
+            </thead>
+            <tbody id="shoppingBody" data-default-exp-display="{{ default_exp_date }}" data-default-exp-iso="{{ default_exp_date_iso }}">
+                {% for item in shopping_list %}
+                <tr data-name="{{ item.name }}" data-missing="{{ item.missing }}">
+                    <td><input type="checkbox" class="rowCheck" value="{{ item.name }}"/></td>
+                    <td class="col-name">{{ item.name }}</td>
+                    <td>{{ item.have }}</td>
+                    <td>{{ item.required }}</td>
+                    <td class="miss-val" style="font-weight:600; color:#d84315;">{{ item.missing }}</td>
+                    <td class="buy-qty-cell">
+                        <span class="buy-qty-label">{{ item.missing }}</span>
+                        <input class="qty-input" type="number" min="1" value="{{ item.missing }}" style="display:none;" />
+                    </td>
+                    <td class="exp-cell">
+                        <span class="exp-label">{{ default_exp_date }}</span>
+                        <input class="exp-input" type="date" value="{{ default_exp_date_iso }}" style="display:none;" />
+                    </td>
+                    <td>{{ item.unit }}</td>
+                    <td class="actions-cell">
+                        <button type="button" class="small-btn button editRowBtn" style="background:#546e7a;">Edit</button>
+                        <button type="button" class="small-btn button saveRowBtn" style="background:#00796b; display:none;">Save</button>
+                        <button type="button" class="small-btn button cancelRowBtn" style="background:#b71c1c; display:none;">Cancel</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </form>
+        <div class="legend">Check items you purchased (optionally edit quantity) then click "Bought". Use Undo to revert the last purchase operation.</div>
+        {% endif %}
+
+        {% if excluded_past_days %}
+        <div style="margin:8px 0 4px 0; font-size:0.75rem; background:#fff3e0; padding:8px 12px; border-left:4px solid #fb8c00; border-radius:6px;">
+            The past days of this week have been excluded from the list. <a href="/shopping-list?week={{ week }}&include_past=1" style="font-weight:600; color:#e65100;">Show past days</a>
+        </div>
+        {% else %}
+        <div style="margin:8px 0 4px 0; font-size:0.65rem; color:#666;">
+            <a href="/shopping-list?week={{ week }}" style="color:#2e7d32;">Hide past days (current week only)</a>
+        </div>
+        {% endif %}
+
+        <div class="footer-links">
+            <button type="button" class="button" id="exportPdfBtn" style="background:#3949ab;">Export PDF</button>
+            <button type="button" class="button" id="printBtn" style="background:#455a64;">Print</button>
+        </div>
+    </div>
+    <script>
+    (function(){
+        const buyBtn = document.getElementById('buyBtn');
+        const undoBtn = document.getElementById('undoBtn');
+        const msgBar = document.getElementById('msgBar');
+        const week = {{ week }};
+        const masterCheck = document.getElementById('masterCheck');
+
+        function showMessage(txt, ok=true){
+            if(!msgBar) return;
+            msgBar.textContent = txt;
+            msgBar.style.display='block';
+            msgBar.style.background = ok ? '#e8f5e9' : '#ffebee';
+            msgBar.style.color = ok ? '#1b5e20' : '#b71c1c';
+        }
+        function clearMessage(){ if(msgBar){ msgBar.style.display='none'; } }
+
+        function updateBuyEnabled(){
+            const checks = Array.from(document.querySelectorAll('.rowCheck'));
+            const any = checks.some(c=>c.checked);
+            buyBtn.disabled = !any; if(buyBtn.disabled) buyBtn.classList.add('disabled'); else buyBtn.classList.remove('disabled');
+            // master checkbox state
+            if(masterCheck){
+                const all = checks.length>0 && checks.every(c=>c.checked);
+                const none = checks.every(c=>!c.checked);
+                masterCheck.checked = all;
+                masterCheck.indeterminate = !all && !none;
+            }
+        }
+
+        function formatDisplayFromISO(iso){
+            if(!iso) return '';
+            const parts = iso.split('-');
+            if(parts.length===3){ return parts[2]+'-'+parts[1]+'-'+parts[0]; }
+            return iso;
+        }
+        function isoFromDisplay(disp){
+            // from dd-mm-YYYY -> YYYY-MM-DD
+            const p = disp.split('-');
+            if(p.length===3){ return p[2]+'-'+p[1]+'-'+p[0]; }
+            return disp;
+        }
+
+        // Edit row
+        document.querySelectorAll('.editRowBtn').forEach(btn=>{
+            btn.addEventListener('click', ()=>{
+                const tr = btn.closest('tr');
+                tr.classList.add('row-editing');
+                btn.style.display='none';
+                tr.querySelector('.saveRowBtn').style.display='inline-block';
+                tr.querySelector('.cancelRowBtn').style.display='inline-block';
+                tr.querySelector('.buy-qty-label').style.display='none';
+                const input = tr.querySelector('.qty-input');
+                input.style.display='inline-block';
+                const expInput = tr.querySelector('.exp-input');
+                const expLabel = tr.querySelector('.exp-label');
+                expLabel.style.display='none';
+                expInput.style.display='inline-block';
+                expInput.focus();
+            });
+        });
+        document.querySelectorAll('.cancelRowBtn').forEach(btn=>{
+            btn.addEventListener('click', ()=>{
+                const tr = btn.closest('tr');
+                tr.classList.remove('row-editing');
+                tr.querySelector('.saveRowBtn').style.display='none';
+                tr.querySelector('.cancelRowBtn').style.display='none';
+                tr.querySelector('.editRowBtn').style.display='inline-block';
+                const input = tr.querySelector('.qty-input');
+                input.value = tr.dataset.missing;
+                input.style.display='none';
+                tr.querySelector('.buy-qty-label').textContent = tr.dataset.missing;
+                tr.querySelector('.buy-qty-label').style.display='inline';
+                const expInput = tr.querySelector('.exp-input');
+                const expLabel = tr.querySelector('.exp-label');
+                expInput.style.display='none';
+                expLabel.style.display='inline';
+            });
+        });
+        document.querySelectorAll('.saveRowBtn').forEach(btn=>{
+            btn.addEventListener('click', ()=>{
+                const tr = btn.closest('tr');
+                const input = tr.querySelector('.qty-input');
+                let v = parseInt(input.value,10);
+                if(isNaN(v) || v<=0) v = parseInt(tr.dataset.missing,10);
+                tr.querySelector('.buy-qty-label').textContent = v;
+                input.value = v;
+                const expInput = tr.querySelector('.exp-input');
+                const expLabel = tr.querySelector('.exp-label');
+                // Convert ISO date to display dd-mm-YYYY
+                const isoVal = expInput.value;
+                expLabel.textContent = formatDisplayFromISO(isoVal);
+                tr.classList.remove('row-editing');
+                input.style.display='none';
+                expInput.style.display='none';
+                tr.querySelector('.buy-qty-label').style.display='inline';
+                expLabel.style.display='inline';
+                tr.querySelector('.saveRowBtn').style.display='none';
+                tr.querySelector('.cancelRowBtn').style.display='none';
+                tr.querySelector('.editRowBtn').style.display='inline-block';
+            });
+        });
+
+        if(masterCheck){
+            masterCheck.addEventListener('change', ()=>{
+                const val = masterCheck.checked;
+                document.querySelectorAll('.rowCheck').forEach(c=> c.checked = val);
+                updateBuyEnabled();
+            });
+        }
+
+        document.querySelectorAll('.rowCheck').forEach(ch=> ch.addEventListener('change', updateBuyEnabled));
+        updateBuyEnabled();
+
+        async function refreshUndoStatus(){
+            try {
+                const r = await fetch('/api/shopping-list/undo/status');
+                if(!r.ok) return;
+                const d = await r.json();
+                if(d.available){
+                    undoBtn.disabled = false; undoBtn.classList.remove('disabled');
+                    undoBtn.title = 'Undo last purchase ('+ (d.timestamp || '') +')';
+                } else {
+                    undoBtn.disabled = true; undoBtn.classList.add('disabled');
+                }
+            } catch(e){ console.warn('Undo status fail', e); }
+        }
+        refreshUndoStatus();
+
+        async function postJson(url,payload){
+            return fetch(url,{method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+        }
+
+        buyBtn.addEventListener('click', async ()=>{
+            const rows = Array.from(document.querySelectorAll('tbody tr'));
+            const selected = rows.filter(r=> r.querySelector('.rowCheck').checked);
+            if(selected.length===0) return;
+            buyBtn.disabled = true; buyBtn.textContent='Processing...';
+            clearMessage();
+            const payloadItems = selected.map(r=>{
+                const name = r.dataset.name;
+                const qtyLabel = r.querySelector('.buy-qty-label');
+                const originalMissing = parseInt(r.dataset.missing,10);
+                const chosen = parseInt(qtyLabel.textContent,10);
+                const expLabel = r.querySelector('.exp-label');
+                const expDisp = expLabel ? expLabel.textContent.trim() : '';
+                const expISO = isoFromDisplay(expDisp);
+                const defaultDisp = document.getElementById('shoppingBody').dataset.defaultExpDisplay;
+                const defaultISO = document.getElementById('shoppingBody').dataset.defaultExpIso;
+                const changedExp = expDisp && expDisp !== defaultDisp; // if user changed date from default show explicitly
+                if(!isNaN(chosen) && chosen>0 && (chosen!==originalMissing || changedExp)){
+                    return {name, quantity: chosen, exp_date: expDisp};
+                }
+                if(changedExp){
+                    return {name, exp_date: expDisp};
+                }
+                return name;
+            });
+            let resp = await postJson('/api/shopping-list/buy', {week, items: payloadItems});
+            if(resp.status===404) resp = await postJson('/api/shopping-list/buy/', {week, items: payloadItems});
+            if(!resp.ok){
+                let detail=''; try{ const e=await resp.json(); detail=e.detail||JSON.stringify(e);}catch(_){ }
+                showMessage('Error ('+resp.status+'): '+detail,false);
+                buyBtn.disabled=false; buyBtn.textContent='Bought';
+                return;
+            }
+            showMessage('Purchase applied. Refreshing...', true);
+            setTimeout(()=> window.location.reload(), 700);
+        });
+
+        undoBtn.addEventListener('click', async ()=>{
+            if(undoBtn.disabled) return;
+            undoBtn.disabled=true; undoBtn.textContent='Undoing...';
+            let resp = await postJson('/api/shopping-list/undo', {});
+            if(resp.status===404) resp = await postJson('/api/shopping-list/undo/', {});
+            if(!resp.ok){
+                let detail=''; try{ const e=await resp.json(); detail=e.detail||JSON.stringify(e);}catch(_){ }
+                showMessage('Undo failed ('+resp.status+'): '+detail,false);
+                undoBtn.textContent='Undo'; refreshUndoStatus();
+                return;
+            }
+            showMessage('Undo successful. Refreshing...', true);
+            setTimeout(()=> window.location.reload(), 700);
+        });
+    })();
+
+    // Dynamic PDF Export logic with fallback
+    (function(){
+        const exportBtn = document.getElementById('exportPdfBtn');
+        const printBtn = document.getElementById('printBtn');
+        if(printBtn){ printBtn.addEventListener('click', ()=> window.print()); }
+
+        function loadScriptSequential(srcList){
+            return new Promise((resolve, reject)=>{
+                let idx=0;
+                function next(){
+                    if(idx>=srcList.length){ reject(new Error('All sources failed')); return; }
+                    const src = srcList[idx++];
+                    const s = document.createElement('script');
+                    s.src = src;
+                    s.onload = ()=> resolve();
+                    s.onerror = ()=> next();
+                    document.head.appendChild(s);
+                }
+                next();
+            });
+        }
+
+        async function ensureJsPDF(){
+            if(window.jspdf && window.jspdf.jsPDF && window.jspdf.jsPDF.API){ return true; }
+            // Try primary jsPDF
+            await loadScriptSequential([
+                'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
+                'https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js'
+            ]).catch(()=>{});
+            if(!(window.jspdf && window.jspdf.jsPDF)) return false;
+            if(window.jspdf.jsPDF && window.jspdf.jsPDF.API.autoTable) return true; // plugin already bundled? (unlikely)
+            // Load autotable
+            await loadScriptSequential([
+                'https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js',
+                'https://unpkg.com/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js'
+            ]).catch(()=>{});
+            return true;
+        }
+
+        function collectTable(){
+            const body = [];
+            document.querySelectorAll('#shoppingBody tr').forEach(tr=>{
+                const name = tr.querySelector('.col-name')?.textContent.trim() || '';
+                const have = tr.children[2].textContent.trim();
+                const req = tr.children[3].textContent.trim();
+                const miss = tr.querySelector('.miss-val')?.textContent.trim() || '';
+                const buy = tr.querySelector('.buy-qty-label')?.textContent.trim() || '';
+                const exp = tr.querySelector('.exp-label')?.textContent.trim() || '';
+                const unit = tr.children[7].textContent.trim();
+                body.push([name, have, req, miss, buy, exp, unit]);
+            });
+            return body;
+        }
+
+        async function doExport(){
+            exportBtn.disabled = true;
+            const original = exportBtn.textContent;
+            exportBtn.textContent = 'Preparing...';
+            const ok = await ensureJsPDF();
+            if(!(ok && window.jspdf && window.jspdf.jsPDF)){
+                exportBtn.textContent = original;
+                exportBtn.disabled = false;
+                alert('Could not load PDF library (offline?). Use the Print button and choose "Save as PDF".');
+                return;
+            }
+            try{
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({orientation:'p', unit:'pt', format:'a4'});
+                doc.setFontSize(14); doc.text('Shopping List - Week {{ week }}', 40, 40);
+                const head = [['Ingredient','Have','Required','Missing','Buy Qty','Expiration','Unit']];
+                const body = collectTable();
+                if(doc.autoTable){
+                    doc.autoTable({ head, body, startY:60, styles:{fontSize:9, cellPadding:4}, headStyles:{fillColor:[44,62,80], textColor:255}, alternateRowStyles:{fillColor:[245,245,245]}, margin:{left:40,right:40} });
+                } else {
+                    let y=60; doc.setFontSize(10); body.forEach(r=>{ if(y>780){ doc.addPage(); y=40;} doc.text(r.join(' | '), 40, y); y+=14; });
+                }
+                doc.save(`shopping_list_week_{{ week }}.pdf`);
+            }catch(e){
+                console.error(e);
+                alert('PDF export failed. Use Print -> Save as PDF.');
+            } finally {
+                exportBtn.textContent = original;
+                exportBtn.disabled = false;
+            }
+        }
+
+        if(exportBtn){ exportBtn.addEventListener('click', doExport); }
+    })();
+    </script>
+</body>
+</html>

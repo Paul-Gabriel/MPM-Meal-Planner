@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Pancakes",
+    "date_cooked": "20-09-2025",
+    "servings": 4,
+    "unit": "pcs"
+  },
+  {
+    "name": "Vegetable Stir Fry",
+    "date_cooked": "23-09-2025",
+    "servings": 2,
+    "unit": "pcs"
+  },
+  {
+    "name": "Lasagna",
+    "date_cooked": "25-09-2025",
+    "servings": 5,
+    "unit": "pcs"
+  },
+  {
+    "name": "Pancakes",
+    "date_cooked": "06-10-2025",
+    "day": "Monday",
+    "meal": "breakfast",
+    "overrides": {
+      "Flour": 200,
+      "Milk": 300,
+      "Egg": 2,
+      "Sugar": 20
+    },
+    "servings": 4,
+    "quantity": 4,
+    "unit": "pcs"
+  },
+  {
+    "name": "Chicken Curry",
+    "date_cooked": "06-10-2025",
+    "day": "Monday",
+    "meal": "breakfast",
+    "overrides": {
+      "Chicken breast": 500,
+      "Coconut milk": 400,
+      "Curry paste": 50,
+      "Onion": 1
+    },
+    "servings": 4,
+    "quantity": 4,
+    "unit": "pcs"
+  }
+]

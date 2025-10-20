@@ -1,0 +1,964 @@
+[
+  {
+    "name": "Spaghetti Bolognese",
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "Spaghetti",
+        "default_quantity": 400,
+        "unit": "g"
+      },
+      {
+        "name": "Ground beef",
+        "default_quantity": 500,
+        "unit": "g"
+      },
+      {
+        "name": "Tomato sauce",
+        "default_quantity": 500,
+        "unit": "ml"
+      },
+      {
+        "name": "Onion",
+        "default_quantity": 1,
+        "unit": "pcs"
+      },
+      {
+        "name": "Garlic",
+        "default_quantity": 2,
+        "unit": "cloves"
+      }
+    ],
+    "steps": [
+      "Cook spaghetti according to package instructions.",
+      "Sauté onion and garlic, add beef until browned.",
+      "Add tomato sauce, simmer 20 minutes.",
+      "Serve sauce over spaghetti."
+    ],
+    "tags": [
+      "italian",
+      "pasta",
+      "dinner"
+    ],
+    "image": "spaghetti_bolognese.jpg",
+    "calories_per_serving": 600,
+    "macros": {
+      "protein": 30,
+      "carbohydrates": 75,
+      "fats": 20
+    }
+  },
+  {
+    "name": "Vegetable Stir Fry",
+    "servings": 2,
+    "ingredients": [
+      {
+        "name": "Broccoli",
+        "default_quantity": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Carrot",
+        "default_quantity": 2,
+        "unit": "pcs"
+      },
+      {
+        "name": "Bell pepper",
+        "default_quantity": 1,
+        "unit": "pcs"
+      },
+      {
+        "name": "Soy sauce",
+        "default_quantity": 30,
+        "unit": "ml"
+      }
+    ],
+    "steps": [
+      "Chop vegetables.",
+      "Stir-fry in hot pan with oil for 5 minutes.",
+      "Add soy sauce and serve."
+    ],
+    "tags": [
+      "vegan",
+      "quick",
+      "asian"
+    ],
+    "image": "vegetable_stir_fry.jpg",
+    "calories_per_serving": 250,
+    "macros": {
+      "protein": 5,
+      "carbohydrates": 30,
+      "fats": 10
+    }
+  },
+  {
+    "name": "Chicken Curry",
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "Chicken breast",
+        "default_quantity": 500,
+        "unit": "g"
+      },
+      {
+        "name": "Coconut milk",
+        "default_quantity": 400,
+        "unit": "ml"
+      },
+      {
+        "name": "Curry paste",
+        "default_quantity": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Onion",
+        "default_quantity": 1,
+        "unit": "pcs"
+      }
+    ],
+    "steps": [
+      "Fry onion and curry paste.",
+      "Add chicken, cook until sealed.",
+      "Pour coconut milk and simmer 20 minutes."
+    ],
+    "tags": [
+      "curry",
+      "asian",
+      "spicy"
+    ],
+    "image": "chicken_curry.jpg",
+    "calories_per_serving": 550,
+    "macros": {
+      "protein": 35,
+      "carbohydrates": 25,
+      "fats": 35
+    }
+  },
+  {
+    "name": "Tomato Soup",
+    "servings": 3,
+    "ingredients": [
+      {
+        "name": "Tomato",
+        "default_quantity": 6,
+        "unit": "pcs"
+      },
+      {
+        "name": "Onion",
+        "default_quantity": 1,
+        "unit": "pcs"
+      },
+      {
+        "name": "Garlic",
+        "default_quantity": 2,
+        "unit": "cloves"
+      },
+      {
+        "name": "Vegetable stock",
+        "default_quantity": 500,
+        "unit": "ml"
+      }
+    ],
+    "steps": [
+      "Cook onion and garlic.",
+      "Add chopped tomatoes and stock.",
+      "Simmer 20 minutes, blend until smooth."
+    ],
+    "tags": [
+      "soup",
+      "vegan",
+      "starter"
+    ],
+    "image": "tomato_soup.jpg",
+    "calories_per_serving": 150,
+    "macros": {
+      "protein": 3,
+      "carbohydrates": 20,
+      "fats": 5
+    }
+  },
+  {
+    "name": "Pancakes",
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "Flour",
+        "default_quantity": 200,
+        "unit": "g"
+      },
+      {
+        "name": "Milk",
+        "default_quantity": 300,
+        "unit": "ml"
+      },
+      {
+        "name": "Egg",
+        "default_quantity": 2,
+        "unit": "pcs"
+      },
+      {
+        "name": "Sugar",
+        "default_quantity": 20,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Mix flour, milk, eggs, and sugar.",
+      "Cook in lightly oiled pan until golden.",
+      "Serve with toppings."
+    ],
+    "tags": [
+      "breakfast",
+      "sweet",
+      "quick"
+    ],
+    "image": "pancakes.jpg",
+    "calories_per_serving": 350,
+    "macros": {
+      "protein": 8,
+      "carbohydrates": 50,
+      "fats": 10
+    }
+  },
+  {
+    "name": "Grilled Cheese Sandwich",
+    "servings": 1,
+    "ingredients": [
+      {
+        "name": "Bread",
+        "default_quantity": 2,
+        "unit": "slices"
+      },
+      {
+        "name": "Cheese",
+        "default_quantity": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Butter",
+        "default_quantity": 10,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Butter bread slices.",
+      "Place cheese between slices.",
+      "Grill until golden brown."
+    ],
+    "tags": [
+      "snack",
+      "quick",
+      "vegetarian"
+    ],
+    "image": "grilled_cheese_sandwich.jpg",
+    "calories_per_serving": 400,
+    "macros": {
+      "protein": 15,
+      "carbohydrates": 30,
+      "fats": 25
+    }
+  },
+  {
+    "name": "Omelette",
+    "servings": 1,
+    "ingredients": [
+      {
+        "name": "Egg",
+        "default_quantity": 2,
+        "unit": "pcs"
+      },
+      {
+        "name": "Milk",
+        "default_quantity": 20,
+        "unit": "ml"
+      },
+      {
+        "name": "Cheese",
+        "default_quantity": 30,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Beat eggs with milk.",
+      "Cook in pan, sprinkle cheese before folding."
+    ],
+    "tags": [
+      "breakfast",
+      "quick",
+      "vegetarian"
+    ],
+    "image": "omelette.jpg",
+    "calories_per_serving": 300,
+    "macros": {
+      "protein": 20,
+      "carbohydrates": 5,
+      "fats": 20
+    }
+  },
+  {
+    "name": "Beef Stew",
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "Beef chunks",
+        "default_quantity": 600,
+        "unit": "g"
+      },
+      {
+        "name": "Potato",
+        "default_quantity": 3,
+        "unit": "pcs"
+      },
+      {
+        "name": "Carrot",
+        "default_quantity": 2,
+        "unit": "pcs"
+      },
+      {
+        "name": "Beef stock",
+        "default_quantity": 500,
+        "unit": "ml"
+      }
+    ],
+    "steps": [
+      "Brown beef chunks.",
+      "Add vegetables and stock.",
+      "Simmer for 1.5 hours until tender."
+    ],
+    "tags": [
+      "stew",
+      "comfort",
+      "dinner"
+    ],
+    "image": "beef_stew.jpg",
+    "calories_per_serving": 700,
+    "macros": {
+      "protein": 40,
+      "carbohydrates": 50,
+      "fats": 30
+    }
+  },
+  {
+    "name": "Caesar Salad",
+    "servings": 2,
+    "ingredients": [
+      {
+        "name": "Lettuce",
+        "default_quantity": 1,
+        "unit": "head"
+      },
+      {
+        "name": "Croutons",
+        "default_quantity": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Parmesan",
+        "default_quantity": 30,
+        "unit": "g"
+      },
+      {
+        "name": "Caesar dressing",
+        "default_quantity": 50,
+        "unit": "ml"
+      }
+    ],
+    "steps": [
+      "Chop lettuce.",
+      "Toss with croutons, parmesan, and dressing."
+    ],
+    "tags": [
+      "salad",
+      "light",
+      "quick"
+    ],
+    "image": "caesar_salad.jpg",
+    "calories_per_serving": 350,
+    "macros": {
+      "protein": 10,
+      "carbohydrates": 20,
+      "fats": 25
+    }
+  },
+  {
+    "name": "Fish Tacos",
+    "servings": 3,
+    "ingredients": [
+      {
+        "name": "White fish",
+        "default_quantity": 300,
+        "unit": "g"
+      },
+      {
+        "name": "Tortilla",
+        "default_quantity": 6,
+        "unit": "pcs"
+      },
+      {
+        "name": "Cabbage",
+        "default_quantity": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Salsa",
+        "default_quantity": 50,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Cook fish with seasoning.",
+      "Warm tortillas.",
+      "Assemble tacos with fish, cabbage, and salsa."
+    ],
+    "tags": [
+      "mexican",
+      "seafood",
+      "dinner"
+    ],
+    "image": "fish_tacos.jpg",
+    "calories_per_serving": 450,
+    "macros": {
+      "protein": 30,
+      "carbohydrates": 40,
+      "fats": 15
+    }
+  },
+  {
+    "name": "Spaghetti Carbonara",
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "Spaghetti",
+        "default_quantity": 400,
+        "unit": "g"
+      },
+      {
+        "name": "Pancetta",
+        "default_quantity": 150,
+        "unit": "g"
+      },
+      {
+        "name": "Egg",
+        "default_quantity": 3,
+        "unit": "pcs"
+      },
+      {
+        "name": "Parmesan",
+        "default_quantity": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Pepper",
+        "default_quantity": 2,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Cook spaghetti al dente.",
+      "Mix beaten eggs with grated parmesan and pepper.",
+      "Crisp pancetta, remove from heat, toss pasta with pancetta and egg mixture until creamy."
+    ],
+    "tags": [
+      "italian",
+      "pasta",
+      "quick"
+    ],
+    "image": "spaghetti_carbonara.jpg",
+    "calories_per_serving": 650,
+    "macros": {
+      "protein": 25,
+      "carbohydrates": 75,
+      "fats": 30
+    }
+  },
+  {
+    "name": "Chicken Alfredo Pasta",
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "Spaghetti",
+        "default_quantity": 400,
+        "unit": "g"
+      },
+      {
+        "name": "Chicken breast",
+        "default_quantity": 300,
+        "unit": "g"
+      },
+      {
+        "name": "Butter",
+        "default_quantity": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Milk",
+        "default_quantity": 200,
+        "unit": "ml"
+      },
+      {
+        "name": "Parmesan",
+        "default_quantity": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Garlic",
+        "default_quantity": 2,
+        "unit": "cloves"
+      }
+    ],
+    "steps": [
+      "Cook spaghetti.",
+      "Sauté garlic in butter, add sliced chicken and cook through.",
+      "Add milk and parmesan, simmer to thicken, toss with pasta."
+    ],
+    "tags": [
+      "pasta",
+      "creamy",
+      "dinner"
+    ],
+    "image": "chicken_alfredo_pasta.jpg",
+    "calories_per_serving": 700,
+    "macros": {
+      "protein": 35,
+      "carbohydrates": 70,
+      "fats": 35
+    }
+  },
+  {
+    "name": "Tomato Basil Soup",
+    "servings": 3,
+    "ingredients": [
+      {
+        "name": "Canned Tomatoes",
+        "default_quantity": 2,
+        "unit": "pcs"
+      },
+      {
+        "name": "Onion",
+        "default_quantity": 1,
+        "unit": "pcs"
+      },
+      {
+        "name": "Garlic",
+        "default_quantity": 2,
+        "unit": "cloves"
+      },
+      {
+        "name": "Basil (Dried)",
+        "default_quantity": 2,
+        "unit": "g"
+      },
+      {
+        "name": "Olive Oil",
+        "default_quantity": 20,
+        "unit": "ml"
+      },
+      {
+        "name": "Vegetable stock",
+        "default_quantity": 500,
+        "unit": "ml"
+      }
+    ],
+    "steps": [
+      "Cook onion and garlic in olive oil.",
+      "Add canned tomatoes and stock, simmer 20 minutes.",
+      "Blend smooth and season with basil."
+    ],
+    "tags": [
+      "soup",
+      "vegetarian",
+      "comfort"
+    ],
+    "image": "tomato_basil_soup.jpg",
+    "calories_per_serving": 180,
+    "macros": {
+      "protein": 4,
+      "carbohydrates": 25,
+      "fats": 7
+    }
+  },
+  {
+    "name": "Garlic Fried Rice",
+    "servings": 2,
+    "ingredients": [
+      {
+        "name": "Rice",
+        "default_quantity": 300,
+        "unit": "g"
+      },
+      {
+        "name": "Egg",
+        "default_quantity": 2,
+        "unit": "pcs"
+      },
+      {
+        "name": "Garlic",
+        "default_quantity": 3,
+        "unit": "cloves"
+      },
+      {
+        "name": "Onion",
+        "default_quantity": 1,
+        "unit": "pcs"
+      },
+      {
+        "name": "Soy Sauce",
+        "default_quantity": 30,
+        "unit": "ml"
+      },
+      {
+        "name": "Olive Oil",
+        "default_quantity": 20,
+        "unit": "ml"
+      }
+    ],
+    "steps": [
+      "Scramble eggs and set aside.",
+      "Stir-fry garlic and onion, add rice and soy sauce.",
+      "Fold in eggs and serve."
+    ],
+    "tags": [
+      "asian",
+      "quick",
+      "rice"
+    ],
+    "image": "garlic_fried_rice.jpg",
+    "calories_per_serving": 400,
+    "macros": {
+      "protein": 10,
+      "carbohydrates": 60,
+      "fats": 10
+    }
+  },
+  {
+    "name": "Shakshuka",
+    "servings": 2,
+    "ingredients": [
+      {
+        "name": "Canned Tomatoes",
+        "default_quantity": 1,
+        "unit": "pcs"
+      },
+      {
+        "name": "Onion",
+        "default_quantity": 1,
+        "unit": "pcs"
+      },
+      {
+        "name": "Garlic",
+        "default_quantity": 2,
+        "unit": "cloves"
+      },
+      {
+        "name": "Paprika",
+        "default_quantity": 5,
+        "unit": "g"
+      },
+      {
+        "name": "Cumin (Ground)",
+        "default_quantity": 5,
+        "unit": "g"
+      },
+      {
+        "name": "Egg",
+        "default_quantity": 4,
+        "unit": "pcs"
+      },
+      {
+        "name": "Olive Oil",
+        "default_quantity": 20,
+        "unit": "ml"
+      }
+    ],
+    "steps": [
+      "Cook onion and garlic with spices.",
+      "Add tomatoes and simmer.",
+      "Make wells and crack eggs, cover until set."
+    ],
+    "tags": [
+      "breakfast",
+      "vegetarian",
+      "middle-eastern"
+    ],
+    "image": "shakshuka.jpg",
+    "calories_per_serving": 300,
+    "macros": {
+      "protein": 15,
+      "carbohydrates": 20,
+      "fats": 15
+    }
+  },
+  {
+    "name": "Margherita Pizza",
+    "servings": 2,
+    "ingredients": [
+      {
+        "name": "Flour",
+        "default_quantity": 300,
+        "unit": "g"
+      },
+      {
+        "name": "Yeast (Dry)",
+        "default_quantity": 7,
+        "unit": "g"
+      },
+      {
+        "name": "Water",
+        "default_quantity": 200,
+        "unit": "ml"
+      },
+      {
+        "name": "Salt",
+        "default_quantity": 5,
+        "unit": "g"
+      },
+      {
+        "name": "Olive Oil",
+        "default_quantity": 20,
+        "unit": "ml"
+      },
+      {
+        "name": "Canned Tomatoes",
+        "default_quantity": 1,
+        "unit": "pcs"
+      },
+      {
+        "name": "Basil (Dried)",
+        "default_quantity": 2,
+        "unit": "g"
+      },
+      {
+        "name": "Parmesan",
+        "default_quantity": 30,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Make dough with flour, yeast, water, salt, and oil; let rise.",
+      "Top with crushed tomatoes, basil, and cheese.",
+      "Bake hot until crust is golden."
+    ],
+    "tags": [
+      "pizza",
+      "italian",
+      "bake"
+    ],
+    "image": "margherita_pizza.jpg",
+    "calories_per_serving": 500,
+    "macros": {
+      "protein": 15,
+      "carbohydrates": 70,
+      "fats": 15
+    }
+  },
+  {
+    "name": "Pancetta Risotto",
+    "servings": 3,
+    "ingredients": [
+      {
+        "name": "Rice",
+        "default_quantity": 300,
+        "unit": "g"
+      },
+      {
+        "name": "Pancetta",
+        "default_quantity": 100,
+        "unit": "g"
+      },
+      {
+        "name": "Onion",
+        "default_quantity": 1,
+        "unit": "pcs"
+      },
+      {
+        "name": "Butter",
+        "default_quantity": 30,
+        "unit": "g"
+      },
+      {
+        "name": "Parmesan",
+        "default_quantity": 50,
+        "unit": "g"
+      },
+      {
+        "name": "Vegetable stock",
+        "default_quantity": 700,
+        "unit": "ml"
+      }
+    ],
+    "steps": [
+      "Cook onion and pancetta in butter.",
+      "Add rice and toast briefly, then add stock gradually.",
+      "Finish with parmesan."
+    ],
+    "tags": [
+      "italian",
+      "rice",
+      "comfort"
+    ],
+    "image": "pancetta_risotto.jpg",
+    "calories_per_serving": 600,
+    "macros": {
+      "protein": 20,
+      "carbohydrates": 80,
+      "fats": 20
+    }
+  },
+  {
+    "name": "Chili con Carne",
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "Beef Mince",
+        "default_quantity": 500,
+        "unit": "g"
+      },
+      {
+        "name": "Canned Tomatoes",
+        "default_quantity": 1,
+        "unit": "pcs"
+      },
+      {
+        "name": "Onion",
+        "default_quantity": 1,
+        "unit": "pcs"
+      },
+      {
+        "name": "Garlic",
+        "default_quantity": 2,
+        "unit": "cloves"
+      },
+      {
+        "name": "Paprika",
+        "default_quantity": 5,
+        "unit": "g"
+      },
+      {
+        "name": "Cumin (Ground)",
+        "default_quantity": 5,
+        "unit": "g"
+      },
+      {
+        "name": "Beans (Canned)",
+        "default_quantity": 400,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Brown mince with onion and garlic.",
+      "Add spices and tomatoes, simmer.",
+      "Stir in beans and cook until thickened."
+    ],
+    "tags": [
+      "stew",
+      "spicy",
+      "dinner"
+    ],
+    "image": "chili_con_carne.jpg",
+    "calories_per_serving": 650,
+    "macros": {
+      "protein": 35,
+      "carbohydrates": 50,
+      "fats": 25
+    }
+  },
+  {
+    "name": "French Toast",
+    "servings": 2,
+    "ingredients": [
+      {
+        "name": "Bread",
+        "default_quantity": 4,
+        "unit": "slices"
+      },
+      {
+        "name": "Egg",
+        "default_quantity": 2,
+        "unit": "pcs"
+      },
+      {
+        "name": "Milk",
+        "default_quantity": 100,
+        "unit": "ml"
+      },
+      {
+        "name": "Sugar",
+        "default_quantity": 10,
+        "unit": "g"
+      },
+      {
+        "name": "Butter",
+        "default_quantity": 10,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Whisk eggs, milk, and sugar.",
+      "Dip bread and pan-fry in butter until golden."
+    ],
+    "tags": [
+      "breakfast",
+      "sweet",
+      "qu"
+    ],
+    "image": "french_toast.jpg",
+    "calories_per_serving": 400,
+    "macros": {
+      "protein": 12,
+      "carbohydrates": 50,
+      "fats": 15
+    }
+  },
+  {
+    "name": "Simple Hummus",
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "Chickpeas (Canned)",
+        "default_quantity": 400,
+        "unit": "g"
+      },
+      {
+        "name": "Garlic",
+        "default_quantity": 1,
+        "unit": "cloves"
+      },
+      {
+        "name": "Olive Oil",
+        "default_quantity": 30,
+        "unit": "ml"
+      },
+      {
+        "name": "Lemon juice",
+        "default_quantity": 30,
+        "unit": "ml"
+      },
+      {
+        "name": "Salt",
+        "default_quantity": 3,
+        "unit": "g"
+      },
+      {
+        "name": "Cumin (Ground)",
+        "default_quantity": 2,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "Blend chickpeas with garlic, lemon juice, and spices.",
+      "Stream in olive oil until smooth."
+    ],
+    "tags": [
+      "dip",
+      "vegan",
+      "middle-eastern"
+    ],
+    "image": "simple_hummus.jpg",
+    "calories_per_serving": 200,
+    "macros": {
+      "protein": 10,
+      "carbohydrates": 30,
+      "fats": 10
+    }
+  }
+]

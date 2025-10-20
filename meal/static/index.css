@@ -1,0 +1,275 @@
+/* ========= Recipe Modal: Layout & Content ========= */
+.recipe-modal-content {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  max-width: 800px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.recipe-modal-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;     /* center vertically */
+  justify-content: center; /* center horizontally */
+}
+
+.recipe-modal-left img {
+  width: 100%;
+  max-width: 350px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.no-image-placeholder {
+  width: 350px;
+  height: 250px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #ccc;
+  border-radius: 12px;
+  color: #999;
+  font-size: 14px;
+  text-align: center;
+}
+
+.recipe-modal-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-height: 400px;
+  overflow-y: auto;
+  border-left: 1px solid #ddd;
+  padding-left: 20px;
+}
+
+.recipes-scroll {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 200px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.recipe-option {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+}
+
+.recipe-option:hover {
+  background-color: #f5f5f5;
+}
+
+.save-btn {
+  align-self: flex-end;
+  padding: 8px 16px;
+  background: green;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ========= Modal Frame ========= */
+.popup {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: none;           /* shown by JS (flex) */
+  align-items: center;
+  justify-content: center;
+}
+
+.popup-content {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  width: 70%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.popup-content .close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* ========= Week Dropdown Highlight ========= */
+#weekList .current-week {
+  font-weight: 700;
+  color: #FF9800;
+}
+
+/* ========= Expiring Items Panel (Right Side) ========= */
+.expiry-panel {
+  position: fixed;
+  top: 90px;
+  right: 30px;
+  width: 320px;
+  max-height: 340px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 14px;
+  overflow: hidden;
+  font-size: 0.9rem;
+  backdrop-filter: blur(2px);
+  z-index: 30;
+  left: auto !important; /* force placement on the right */
+}
+
+.expiry-header {
+  position: relative;
+  font-weight: 600;
+  color: #1f3b57;
+  background: rgba(255,255,255,0.75);
+  padding: 6px 36px 6px 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.15);
+}
+
+.expiry-close-btn {
+  position: absolute;
+  top: 2px;
+  right: 6px;
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  color: #444;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.expiry-close-btn:hover { background: rgba(0,0,0,0.08); }
+
+/* Sticky header so column titles remain visible while scrolling */
+.expiry-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: rgba(255,255,255,0.95);
+}
+
+/* Dynamic sizing via JS now; remove static assumptions */
+.expiry-scroll {
+  /* JS va seta max-height = header + 5 randuri */
+  max-height: none;
+  overflow-y: auto;
+}
+
+/* Eliminat height fix pe randuri pentru a masura corect inaltimea naturala */
+/* .expiry-table tbody tr { height: 26px; } */
+
+.expiry-table { width: 100%; border-collapse: collapse; }
+
+.expiry-table th,
+.expiry-table td { padding: 4px 6px; }
+
+.expiry-table th {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: #365a72;
+  background: rgba(255,255,255,0.85);
+}
+
+.expiry-table tr { border-bottom: 1px solid rgba(0,0,0,0.07); }
+.expiry-table tr:last-child { border-bottom: none; }
+
+.ex-name { font-weight: 500; }
+
+/* Severity colors */
+.sev-0 { background: #ffdddd; }
+.sev-1 { background: #ffe6cc; }
+.sev-23 { background: #fff8cc; }
+
+/* Expired items distinct */
+.sev-expired { background: #d8d8d8; position: relative; }
+.sev-expired td { text-decoration: line-through; color:#555; }
+
+.sev-0 td, .sev-1 td, .sev-23 td, .sev-expired td { transition: background .2s; }
+.expiry-table tr:hover { filter: brightness(0.97); }
+
+/* Show button (when panel hidden) */
+#show-expiry-panel-btn {
+  position: fixed;
+  top: 90px;
+  right: 30px;
+  display: none; /* ascuns cât timp panelul e vizibil */
+  background: #1f3b57;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+#show-expiry-panel-btn:hover { background:#274d6d; }
+
+/* Low stock show button (left corner) */
+#show-lowstock-panel-btn {
+  position: fixed;
+  top: 90px;
+  left: 30px;
+  display: none; /* apare doar când panoul low stock e ascuns */
+  background: #1f3b57;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  z-index: 1200;
+}
+#show-lowstock-panel-btn:hover { background:#274d6d; }
+
+/* Low stock panel aligned on left, same vertical line as expiring panel */
+#lowstock-panel-home {
+  left: 30px;
+  left: 30px !important;
+  top: 90px !important;
+}
+
+@media (max-width: 800px) {
+  /* Stack panels to avoid overlap on narrow screens */
+  #lowstock-panel-home { top: 90px !important; }
+  #expiry-panel-home { top: 450px !important; }
+}
+
+.kcal-line {
+  margin-top: 10px;
+  font-size: 0.95em;
+  color: #333;
+  text-align: center;
+}
+.kcal-line .muted { color: #888; }
+.kcal-line strong { font-weight: 700; }
+
+button.locked[disabled] {
+  opacity: .45;
+  cursor: not-allowed;
+  filter: grayscale(0.2);
+}
+
+/* Meal hader */

@@ -1,0 +1,275 @@
+[
+  {
+    "name": "Spaghetti",
+    "unit": "g",
+    "default_quantity": 500,
+    "data_expirare": "22-03-2027",
+    "tags": [
+      "pasta"
+    ]
+  },
+  {
+    "name": "Rice",
+    "unit": "g",
+    "default_quantity": 1000,
+    "data_expirare": "22-09-2027",
+    "tags": [
+      "grains"
+    ]
+  },
+  {
+    "name": "Ground beef",
+    "unit": "g",
+    "default_quantity": 500,
+    "data_expirare": "01-10-2025",
+    "tags": [
+      "meat-beef"
+    ]
+  },
+  {
+    "name": "Tomato sauce",
+    "unit": "ml",
+    "default_quantity": 1500,
+    "data_expirare": "22-09-2027",
+    "tags": [
+      "canned"
+    ]
+  },
+  {
+    "name": "Eggs",
+    "unit": "pcs",
+    "default_quantity": 10,
+    "data_expirare": "20-10-2025",
+    "tags": [
+      "dairy"
+    ]
+  },
+  {
+    "name": "Pancetta",
+    "unit": "g",
+    "default_quantity": 150,
+    "data_expirare": "06-10-2025",
+    "tags": [
+      "meat-pork"
+    ]
+  },
+  {
+    "name": "Tomatoes",
+    "unit": "pcs",
+    "default_quantity": 6,
+    "data_expirare": "29-09-2025",
+    "tags": [
+      "vegetables"
+    ]
+  },
+  {
+    "name": "Garlic",
+    "unit": "cloves",
+    "default_quantity": 4,
+    "data_expirare": "21-12-2025",
+    "tags": [
+      "vegetables"
+    ]
+  },
+  {
+    "name": "Parmesan",
+    "unit": "g",
+    "default_quantity": 200,
+    "data_expirare": "21-11-2025",
+    "tags": [
+      "dairy"
+    ]
+  },
+  {
+    "name": "Olive Oil",
+    "unit": "ml",
+    "default_quantity": 500,
+    "data_expirare": "22-03-2027",
+    "tags": [
+      "oil"
+    ]
+  },
+  {
+    "name": "Milk",
+    "unit": "ml",
+    "default_quantity": 700,
+    "data_expirare": "29-09-2025",
+    "tags": [
+      "dairy"
+    ]
+  },
+  {
+    "name": "Butter",
+    "unit": "g",
+    "default_quantity": 250,
+    "data_expirare": "21-12-2025",
+    "tags": [
+      "dairy"
+    ]
+  },
+  {
+    "name": "Flour",
+    "unit": "g",
+    "default_quantity": 800,
+    "data_expirare": "22-09-2026",
+    "tags": [
+      "baking"
+    ]
+  },
+  {
+    "name": "Salt",
+    "unit": "g",
+    "default_quantity": 500,
+    "data_expirare": "22-09-2030",
+    "tags": [
+      "condiment"
+    ]
+  },
+  {
+    "name": "Pepper",
+    "unit": "g",
+    "default_quantity": 50,
+    "data_expirare": "22-09-2028",
+    "tags": [
+      "condiment"
+    ]
+  },
+  {
+    "name": "Canned Tomatoes",
+    "unit": "pcs",
+    "default_quantity": 4,
+    "data_expirare": "22-09-2027",
+    "tags": [
+      "canned"
+    ]
+  },
+  {
+    "name": "Yeast (Dry)",
+    "unit": "g",
+    "default_quantity": 50,
+    "data_expirare": "22-03-2027",
+    "tags": [
+      "condiment"
+    ]
+  },
+  {
+    "name": "Sugar",
+    "unit": "g",
+    "default_quantity": 980,
+    "data_expirare": "22-09-2030",
+    "tags": [
+      "condiment"
+    ]
+  },
+  {
+    "name": "Baking Powder",
+    "unit": "g",
+    "default_quantity": 100,
+    "data_expirare": "22-09-2027",
+    "tags": [
+      "baking"
+    ]
+  },
+  {
+    "name": "Basil (Dried)",
+    "unit": "g",
+    "default_quantity": 20,
+    "data_expirare": "22-09-2027",
+    "tags": [
+      "condiment"
+    ]
+  },
+  {
+    "name": "Oregano (Dried)",
+    "unit": "g",
+    "default_quantity": 20,
+    "data_expirare": "22-09-2027",
+    "tags": [
+      "condiment"
+    ]
+  },
+  {
+    "name": "Paprika",
+    "unit": "g",
+    "default_quantity": 50,
+    "data_expirare": "22-09-2027",
+    "tags": [
+      "condiment"
+    ]
+  },
+  {
+    "name": "Cumin (Ground)",
+    "unit": "g",
+    "default_quantity": 50,
+    "data_expirare": "22-09-2027",
+    "tags": [
+      "condiment"
+    ]
+  },
+  {
+    "name": "Cinnamon (Ground)",
+    "unit": "g",
+    "default_quantity": 50,
+    "data_expirare": "22-09-2027",
+    "tags": [
+      "condiment"
+    ]
+  },
+  {
+    "name": "Vinegar (White)",
+    "unit": "ml",
+    "default_quantity": 500,
+    "data_expirare": "22-09-2030",
+    "tags": [
+      "condiment"
+    ]
+  },
+  {
+    "name": "Soy Sauce",
+    "unit": "ml",
+    "default_quantity": 500,
+    "data_expirare": "22-09-2027",
+    "tags": [
+      "sauce"
+    ]
+  },
+  {
+    "name": "Egg",
+    "unit": "pcs",
+    "default_quantity": 2,
+    "data_expirare": "13-10-2025",
+    "tags": [
+      "dairy"
+    ]
+  },
+  {
+    "name": "Ground beef",
+    "default_quantity": 500,
+    "unit": "g",
+    "data_expirare": "13-10-2025",
+    "tags": [
+      "meat-beef"
+    ],
+    "batch_id": "93f8cd50-d55b-4d9e-bb86-f4333625a4d8"
+  },
+  {
+    "name": "Onion",
+    "default_quantity": 2,
+    "unit": "pcs",
+    "data_expirare": "13-10-2025",
+    "tags": [
+      "vegetables"
+    ],
+    "batch_id": "93f8cd50-d55b-4d9e-bb86-f4333625a4d8"
+  },
+  {
+    "name": "Spaghetti",
+    "default_quantity": 300,
+    "unit": "g",
+    "data_expirare": "13-10-2025",
+    "tags": [
+      "pasta"
+    ],
+    "batch_id": "93f8cd50-d55b-4d9e-bb86-f4333625a4d8"
+  }
+]

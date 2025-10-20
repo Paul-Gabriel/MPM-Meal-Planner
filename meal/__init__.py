@@ -1,0 +1,1 @@
+"""Meal Planner package root."""
