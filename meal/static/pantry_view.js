@@ -1,12 +1,4 @@
 // pantry_view.js - filtering & sorting for My Pantry (read-only page)
-// Assumes presence of:
-//  - #view-ingredients-table with tbody#view-ingredients-body and columns: name, quantity, unit, tag (.tag), expiration (.exp)
-//  - #view-cooked-table with tbody#view-cooked-body and columns: name (.name), servings (.servings), unit (.unit), date (.date)
-//  - Tag filter select: #view-ing-filter-tag
-//  - Ingredient sort select: #view-ing-sort (values: alpha | expiration)
-//  - Cooked sort select: #view-cooked-sort (values: alpha | servings | date)
-//  - data-allowed-tags attribute on container (optional; used only for potential future ordering)
-
 (function(){
     document.addEventListener('DOMContentLoaded', () => {
         const ingTbody = document.getElementById('view-ingredients-body');
@@ -20,6 +12,7 @@
         const container = document.querySelector('.view-context');
         const allowedTags = container?.getAttribute('data-allowed-tags')?.split(',')?.map(s=>s.trim()) || [];
 
+        // ===== Filtering & Sorting =====
         function collectTags(){
             const set = new Set();
             ingTbody.querySelectorAll('tr').forEach(tr => {
@@ -33,7 +26,6 @@
             if(!tagFilter) return;
             const current = tagFilter.value || '__all__';
             const existing = collectTags();
-            // Build ordered list: allowed tags (except other), then unknown existing, then other
             const ordered = [];
             allowedTags.forEach(t=>{ if(t==='other') return; ordered.push(t); });
             existing.forEach(t=>{ if(!allowedTags.includes(t)) ordered.push(t); });
@@ -100,7 +92,7 @@
         }
 
         function sortIngredientsByTagOrder(){
-            if(!allowedTags.length) return; // fallback if not provided
+            if(!allowedTags.length) return;
             const rows = Array.from(ingTbody.querySelectorAll('tr'));
             rows.sort((a,b)=>{
                 const ta = (a.querySelector('.tag')?.textContent||'').trim().toLowerCase();
@@ -119,23 +111,65 @@
             rows.forEach(r=>ingTbody.appendChild(r));
         }
 
-        // Enhance selects visually (fallback if CSS not loaded yet)
+        // ===== NEW: Expiration / cooked indicator =====
+        function markExpiringSoon() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // normalizează ora
+    const MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+    function daysBetween(d1, d2) {
+        const utc1 = Date.UTC(d1.getFullYear(), d1.getMonth(), d1.getDate());
+        const utc2 = Date.UTC(d2.getFullYear(), d2.getMonth(), d2.getDate());
+        return Math.floor((utc2 - utc1) / MS_PER_DAY);
+    }
+
+    // Ingrediente
+    ingTbody.querySelectorAll('.exp').forEach(td => {
+        const text = td.textContent.trim();
+        if (!/^\d{2}-\d{2}-\d{4}$/.test(text)) return;
+        const [d, m, y] = text.split('-').map(Number);
+        const expDate = new Date(y, m - 1, d);
+        expDate.setHours(0, 0, 0, 0);
+        const diff = daysBetween(today, expDate);
+        td.classList.remove('expiring-soon');
+        if (diff >= 0 && diff <= 10) {
+            td.classList.add('expiring-soon');
+            td.title = `Expiring in ${diff} day${diff === 1 ? '' : 's'}`;
+        }
+    });
+
+    // Rețete (gătite în ultimele 10 zile)
+    cookedTbody.querySelectorAll('.date').forEach(td => {
+        const text = td.textContent.trim();
+        if (!/^\d{2}-\d{2}-\d{4}$/.test(text)) return;
+        const [d, m, y] = text.split('-').map(Number);
+        const cookedDate = new Date(y, m - 1, d);
+        cookedDate.setHours(0, 0, 0, 0);
+        const diff = daysBetween(cookedDate, today);
+        td.classList.remove('expiring-soon');
+        if (diff >= 0 && diff <= 10) {
+            td.classList.add('expiring-soon');
+            td.title = `Cooked ${diff} day${diff === 1 ? '' : 's'} ago`;
+        }
+    });
+}
+
+
+        // ===== Init setup =====
         [tagFilter, ingSort, cookedSort].forEach(sel=>{
             if(sel) sel.classList.add('control-lg');
         });
 
-        // Initial population & application
         buildTagOptions();
         applyIngredientSort();
         applyIngredientFilter();
         applyCookedSort();
+        markExpiringSoon(); // 👈 aici se aplică marcajul
 
-        // Events
-        if(tagFilter) tagFilter.addEventListener('change', ()=> applyIngredientFilter());
-        if(ingSort) ingSort.addEventListener('change', ()=> { applyIngredientSort(); applyIngredientFilter(); });
-        if(cookedSort) cookedSort.addEventListener('change', ()=> applyCookedSort());
-        if(tagOrderBtn) tagOrderBtn.addEventListener('click', ()=>{ sortIngredientsByTagOrder(); applyIngredientFilter(); });
-
-        // If future dynamic updates occur (not in read-only view now), we would re-run buildTagOptions()
+        // ===== Events =====
+        if(tagFilter) tagFilter.addEventListener('change', ()=> { applyIngredientFilter(); markExpiringSoon(); });
+        if(ingSort) ingSort.addEventListener('change', ()=> { applyIngredientSort(); applyIngredientFilter(); markExpiringSoon(); });
+        if(cookedSort) cookedSort.addEventListener('change', ()=> { applyCookedSort(); markExpiringSoon(); });
+        if(tagOrderBtn) tagOrderBtn.addEventListener('click', ()=>{ sortIngredientsByTagOrder(); applyIngredientFilter(); markExpiringSoon(); });
     });
 })();

@@ -30,13 +30,27 @@ header { background: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
 .header-row { max-width: 1400px; margin: 0 auto; display: flex; align-items: center;
     justify-content: center; position: relative; }
 h1 { font-size: 2rem; font-weight: 600; letter-spacing: 0.5px; }
-.main-btn { background: #ff9800; color: white; border: none; padding: 0.75rem 1.5rem;
-    border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer;
-    transition: all 0.3s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+.main-btn {
+    background: #ff9800;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 .main-btn:hover { background: #f57c00; transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
-.main-btn.small { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
-.main-btn.danger { background: #f44336; }
+.main-btn.small {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+}
+.main-btn.danger {
+    background: #f44336;
+}
 .main-btn.danger:hover { background: #d32f2f; }
 .back-btn { position: absolute; right: 0; text-decoration: none; }
 .back-btn button { background: white; color: #2e7d32; }

@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>My Pantry</title>
-    <link rel="stylesheet" href="/static/style.css?ts={{ time }}">
-    <link rel="stylesheet" href="/static/index.css?ts={{ time }}">
+    <link rel="stylesheet" href="/static/style_camara.css?ts={{ time }}">
 </head>
 <body class="bg pantry-page">
 <header>
@@ -173,44 +172,6 @@
 </div>
 
 <script src="/static/pantry_view.js"></script>
-
-<style>
-/* Unified alerts styles copied from index for consistency */
-.alerts-toggle-btn { background:#2c3e50; color:#fff; border:none; padding:8px 16px; border-radius:24px; cursor:pointer; font-size:0.85rem; box-shadow:0 4px 12px rgba(0,0,0,0.25); }
-.alerts-toggle-btn:hover { background:#1d2833; }
-.alerts-panel { position:fixed; top:60px; right:0; width:370px; max-width:90%; background:rgba(255,255,255,0.97); backdrop-filter:blur(4px); box-shadow:-6px 0 18px -4px rgba(0,0,0,0.35); border-left:1px solid #ddd; border-top-left-radius:14px; border-bottom-left-radius:14px; z-index:2200; transform:translateX(110%); transition:transform .35s ease; display:flex; flex-direction:column; max-height:calc(100% - 80px); }
-.alerts-panel.open { transform:translateX(0); }
-.alerts-header { display:flex; justify-content:space-between; align-items:center; padding:10px 14px 6px 18px; border-bottom:1px solid #eee; }
-.alerts-header .total-badge { background:#ff9800; color:#fff; font-size:0.65rem; padding:4px 7px; border-radius:12px; margin-left:6px; }
-.alerts-tabs { display:flex; gap:6px; padding:8px 12px 4px 12px; flex-wrap:wrap; }
-.alerts-tab { background:#f1f1f1; border:none; padding:6px 12px; border-radius:18px; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.5px; cursor:pointer; display:flex; align-items:center; gap:6px; }
-.alerts-tab.active { background:#ff9800; color:#fff; }
-.alerts-tab .tab-badge { background:rgba(0,0,0,0.2); color:#fff; padding:2px 6px; border-radius:10px; font-size:0.6rem; }
-.alerts-tab.active .tab-badge { background:rgba(255,255,255,0.25); }
-.alerts-content { padding:4px 12px 10px 12px; overflow-y:auto; }
-.alerts-content table { width:100%; border-collapse:collapse; font-size:0.75rem; }
-.alerts-content th { text-align:left; background:#ff9800; color:#fff; padding:6px 8px; font-weight:600; position:sticky; top:0; }
-.alerts-content td { padding:4px 8px; border-bottom:1px solid #eee; }
-.alerts-list { animation: fadeIn .25s ease; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(4px);} to { opacity:1; transform:translateY(0);} }
-.hide-all-btn { background:transparent; border:none; font-size:1.2rem; line-height:1; cursor:pointer; color:#555; padding:2px 6px; border-radius:6px; }
-.hide-all-btn:hover { background:#eee; }
-.mini-hide-btn { background:#2c3e50; color:#fff; border:none; padding:6px 14px; border-radius:18px; cursor:pointer; font-size:0.65rem; }
-.mini-hide-btn:hover { background:#18222b; }
-.alerts-footer { padding:6px 12px 12px 12px; border-top:1px solid #eee; text-align:right; }
-.sev-expired { background:#ffebee; }
-.sev-0 { background:#ffe0b2; }
-.sev-1 { background:#fff3cd; }
-.sev-23 { background:#f1f8e9; }
-.alerts-table-wrapper { position:relative; overflow-y:auto; max-height:220px; }
-.alerts-table-wrapper::-webkit-scrollbar { width:6px; }
-.alerts-table-wrapper::-webkit-scrollbar-thumb { background:#bbb; border-radius:4px; }
-.alerts-table-wrapper::-webkit-scrollbar-thumb:hover { background:#999; }
-.alerts-content::-webkit-scrollbar { width:8px; }
-.alerts-content::-webkit-scrollbar-track { background:transparent; }
-.alerts-content::-webkit-scrollbar-thumb { background:#ccc; border-radius:4px; }
-.alerts-content::-webkit-scrollbar-thumb:hover { background:#bbb; }
-</style>
 
 <script>
 (function(){

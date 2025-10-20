@@ -3,40 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Shopping List - Week {{ week }}</title>
-    <link rel="stylesheet" href="/static/style.css">
     <link rel="icon" type="image/png" href="/static/icons/logo.png">
-    <style>
-        body { font-family: Arial, sans-serif; background: #f5f5f5; margin:0; }
-        .container { max-width: 980px; margin: 40px auto; background: #fff; padding: 30px 40px; border-radius: 18px; box-shadow: 0 8px 30px rgba(0,0,0,0.1); }
-        h1 { margin-top:0; }
-        table { width:100%; border-collapse: collapse; }
-        th, td { padding: 8px 10px; border-bottom:1px solid #eee; text-align:left; }
-        th { background:#2c3e50; color:#fff; position: sticky; top:0; }
-        tr:hover { background:#fafafa; }
-        .badge { display:inline-block; background:#FF9800; color:#fff; padding:4px 10px; border-radius:20px; font-size: 0.75em; }
-        a.button, button.button { text-decoration:none; background:#2c3e50; color:#fff; padding:9px 16px; border-radius:26px; font-weight:600; transition:.2s; border:none; cursor:pointer; }
-        a.button:hover, button.button:hover { background:#1b2730; }
-        .small-btn { padding:4px 10px; font-size:0.7rem; border-radius:14px; }
-        .row-editing { background:#fffde7 !important; }
-        .qty-input { width:70px; padding:4px 6px; font-size:0.8rem; border:1px solid #ccc; border-radius:6px; }
-        .actions-cell { white-space:nowrap; }
-        .undo-btn { background:#795548; }
-        .undo-btn:hover { background:#5d4037; }
-        .disabled { opacity:0.45; cursor:not-allowed; }
-        .msg-bar { display:none; padding:10px 14px; border-radius:8px; margin-bottom:14px; font-size:0.85em; font-weight:600; }
-        .legend { font-size:0.78em; color:#666; margin-top:12px; }
-        .footer-links { margin-top:30px; display:flex; gap:15px; }
-    </style>
+    <link rel="stylesheet" href="/static/style_SL.css?ts={{ time }}">
 </head>
 <body>
     <div class="container">
-        <div class="top-actions" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-            <h1 style="font-size:1.4rem;">Shopping List <span class="badge">{{ total_items }} items</span></h1>
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <div class="top-actions">
+            <h1>Shopping List <span class="badge">{{ total_items }} items</span></h1>
+            <div class="button-group">
                 <a class="button" href="/">⬅ Back</a>
                 <a class="button" href="/pantry">My Pantry</a>
                 <button id="undoBtn" class="button undo-btn disabled" title="Undo last purchase" disabled>Undo</button>
-                <button id="buyBtn" class="button" style="background:#2e7d32;" disabled>Bought</button>
+                <button id="buyBtn" class="button success" disabled>Bought</button>
             </div>
         </div>
 
@@ -46,6 +24,7 @@
             <div class="empty">All required ingredients are already in your pantry. 🎉</div>
         {% else %}
         <form id="shoppingForm" onsubmit="return false;">
+        <div class="table-wrapper">
         <table>
             <thead>
                 <tr>
@@ -67,7 +46,7 @@
                     <td class="col-name">{{ item.name }}</td>
                     <td>{{ item.have }}</td>
                     <td>{{ item.required }}</td>
-                    <td class="miss-val" style="font-weight:600; color:#d84315;">{{ item.missing }}</td>
+                    <td class="miss-val">{{ item.missing }}</td>
                     <td class="buy-qty-cell">
                         <span class="buy-qty-label">{{ item.missing }}</span>
                         <input class="qty-input" type="number" min="1" value="{{ item.missing }}" style="display:none;" />
@@ -78,31 +57,31 @@
                     </td>
                     <td>{{ item.unit }}</td>
                     <td class="actions-cell">
-                        <button type="button" class="small-btn button editRowBtn" style="background:#546e7a;">Edit</button>
-                        <button type="button" class="small-btn button saveRowBtn" style="background:#00796b; display:none;">Save</button>
-                        <button type="button" class="small-btn button cancelRowBtn" style="background:#b71c1c; display:none;">Cancel</button>
+                        <button type="button" class="small-btn button edit-btn editRowBtn">Edit</button>
+                        <button type="button" class="small-btn button save-btn saveRowBtn" style="display:none;">Save</button>
+                        <button type="button" class="small-btn button cancel-btn cancelRowBtn" style="display:none;">Cancel</button>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+        </div>
         </form>
-        <div class="legend">Check items you purchased (optionally edit quantity) then click "Bought". Use Undo to revert the last purchase operation.</div>
+        <div class="legend">💡 Check items you purchased (optionally edit quantity) then click "Bought". Use Undo to revert the last purchase operation.</div>
         {% endif %}
 
         {% if excluded_past_days %}
-        <div style="margin:8px 0 4px 0; font-size:0.75rem; background:#fff3e0; padding:8px 12px; border-left:4px solid #fb8c00; border-radius:6px;">
-            The past days of this week have been excluded from the list. <a href="/shopping-list?week={{ week }}&include_past=1" style="font-weight:600; color:#e65100;">Show past days</a>
+        <div class="info-box">
+            ⚠️ The past days of this week have been excluded from the list. <a href="/shopping-list?week={{ week }}&include_past=1">Show past days</a>
         </div>
         {% else %}
-        <div style="margin:8px 0 4px 0; font-size:0.65rem; color:#666;">
-            <a href="/shopping-list?week={{ week }}" style="color:#2e7d32;">Hide past days (current week only)</a>
+        <div class="info-box subtle">
+            <a href="/shopping-list?week={{ week }}">Hide past days (current week only)</a>
         </div>
         {% endif %}
 
         <div class="footer-links">
-            <button type="button" class="button" id="exportPdfBtn" style="background:#3949ab;">Export PDF</button>
-            <button type="button" class="button" id="printBtn" style="background:#455a64;">Print</button>
+            <button type="button" class="button primary" id="exportPdfBtn">📄 Export PDF</button>
         </div>
     </div>
     <script>
@@ -117,15 +96,16 @@
             if(!msgBar) return;
             msgBar.textContent = txt;
             msgBar.style.display='block';
-            msgBar.style.background = ok ? '#e8f5e9' : '#ffebee';
-            msgBar.style.color = ok ? '#1b5e20' : '#b71c1c';
+            msgBar.className = 'msg-bar ' + (ok ? 'success' : 'error');
         }
         function clearMessage(){ if(msgBar){ msgBar.style.display='none'; } }
 
         function updateBuyEnabled(){
             const checks = Array.from(document.querySelectorAll('.rowCheck'));
             const any = checks.some(c=>c.checked);
-            buyBtn.disabled = !any; if(buyBtn.disabled) buyBtn.classList.add('disabled'); else buyBtn.classList.remove('disabled');
+            buyBtn.disabled = !any;
+            if(buyBtn.disabled) buyBtn.classList.add('disabled');
+            else buyBtn.classList.remove('disabled');
             // master checkbox state
             if(masterCheck){
                 const all = checks.length>0 && checks.every(c=>c.checked);
@@ -142,7 +122,6 @@
             return iso;
         }
         function isoFromDisplay(disp){
-            // from dd-mm-YYYY -> YYYY-MM-DD
             const p = disp.split('-');
             if(p.length===3){ return p[2]+'-'+p[1]+'-'+p[0]; }
             return disp;
@@ -194,7 +173,6 @@
                 input.value = v;
                 const expInput = tr.querySelector('.exp-input');
                 const expLabel = tr.querySelector('.exp-label');
-                // Convert ISO date to display dd-mm-YYYY
                 const isoVal = expInput.value;
                 expLabel.textContent = formatDisplayFromISO(isoVal);
                 tr.classList.remove('row-editing');
@@ -254,7 +232,7 @@
                 const expISO = isoFromDisplay(expDisp);
                 const defaultDisp = document.getElementById('shoppingBody').dataset.defaultExpDisplay;
                 const defaultISO = document.getElementById('shoppingBody').dataset.defaultExpIso;
-                const changedExp = expDisp && expDisp !== defaultDisp; // if user changed date from default show explicitly
+                const changedExp = expDisp && expDisp !== defaultDisp;
                 if(!isNaN(chosen) && chosen>0 && (chosen!==originalMissing || changedExp)){
                     return {name, quantity: chosen, exp_date: expDisp};
                 }
@@ -294,8 +272,7 @@
     // Dynamic PDF Export logic with fallback
     (function(){
         const exportBtn = document.getElementById('exportPdfBtn');
-        const printBtn = document.getElementById('printBtn');
-        if(printBtn){ printBtn.addEventListener('click', ()=> window.print()); }
+
 
         function loadScriptSequential(srcList){
             return new Promise((resolve, reject)=>{
@@ -315,14 +292,12 @@
 
         async function ensureJsPDF(){
             if(window.jspdf && window.jspdf.jsPDF && window.jspdf.jsPDF.API){ return true; }
-            // Try primary jsPDF
             await loadScriptSequential([
                 'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
                 'https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js'
             ]).catch(()=>{});
             if(!(window.jspdf && window.jspdf.jsPDF)) return false;
-            if(window.jspdf.jsPDF && window.jspdf.jsPDF.API.autoTable) return true; // plugin already bundled? (unlikely)
-            // Load autotable
+            if(window.jspdf.jsPDF && window.jspdf.jsPDF.API.autoTable) return true;
             await loadScriptSequential([
                 'https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js',
                 'https://unpkg.com/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js'
