@@ -1,12 +1,12 @@
 [
   {
     "name": "Spaghetti",
+    "default_quantity": 200,
     "unit": "g",
-    "default_quantity": 500,
-    "data_expirare": "22-03-2027",
     "tags": [
       "pasta"
-    ]
+    ],
+    "data_expirare": "22-03-2027"
   },
   {
     "name": "Rice",

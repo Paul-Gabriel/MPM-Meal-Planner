@@ -35,12 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return null;
     }
 
-    function closeCurrent(){
-        if(!current) return;
-        current.sourceRow.classList.remove('being-edited');
-        current.formRow.remove();
+    function closeCurrent() {
+        const modal = document.getElementById('edit-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+            document.getElementById('modal-form-container').innerHTML = '';
+        }
         current = null;
     }
+
 
     function buildFormRow(kind, data, mode){
         const colCount = 5; // both tables have 5 columns incl. Actions
@@ -99,19 +102,25 @@ document.addEventListener('DOMContentLoaded', () => {
         return String(str).replace(/[&<>"]+/g, s=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[s]));
     }
 
-    function startEdit(row, kind, mode){
-        // mode: 'edit' | 'add'
-        if(current){
-            if(current.sourceRow === row) return; // already editing this row
-            closeCurrent();
-        }
-        row.classList.add('being-edited');
+    function startEdit(row, kind, mode) {
+        if (current) closeCurrent();
         const data = extractRowData(row, kind, mode);
-        const formRow = buildFormRow(kind, data, mode);
-        row.after(formRow);
-        current = { sourceRow: row, formRow, kind, mode, originalName: data.name };
-        autoFocusFirst(formRow);
-        scrollIntoView(formRow);
+        const formHtml = buildFormHTML(kind, data, mode);
+
+        const modal = document.getElementById('edit-modal');
+        const modalContent = document.getElementById('modal-form-container');
+        modalContent.innerHTML = formHtml;
+
+        modal.classList.remove('hidden');
+
+        current = { sourceRow: row, kind, mode, originalName: data.name };
+
+        // Handle buttons inside modal
+        modal.querySelector('.save-btn').addEventListener('click', saveCurrent);
+        modal.querySelector('.cancel-btn').addEventListener('click', closeCurrent);
+        modal.querySelector('.delete-btn').addEventListener('click', deleteCurrent);
+
+        modal.querySelector('.modal-close').addEventListener('click', closeCurrent);
     }
 
     function extractRowData(row, kind, mode){

@@ -75,39 +75,39 @@
   },
   "2025-W43": {
     "Monday": {
-      "breakfast": "Caesar Salad",
-      "lunch": "Margherita Pizza",
-      "dinner": "Grilled Cheese Sandwich"
+      "breakfast": "-",
+      "lunch": "-",
+      "dinner": "-"
     },
     "Tuesday": {
-      "breakfast": "Chili con Carne",
-      "lunch": "Pancetta Risotto",
-      "dinner": "Fish Tacos"
+      "breakfast": "-",
+      "lunch": "-",
+      "dinner": "-"
     },
     "Wednesday": {
-      "breakfast": "Grilled Cheese Sandwich",
-      "lunch": "Chili con Carne",
-      "dinner": "Beef Stew"
+      "breakfast": "-",
+      "lunch": "-",
+      "dinner": "-"
     },
     "Thursday": {
-      "breakfast": "Spaghetti Carbonara",
-      "lunch": "Shakshuka",
-      "dinner": "Chicken Curry"
+      "breakfast": "-",
+      "lunch": "-",
+      "dinner": "-"
     },
     "Friday": {
-      "breakfast": "Margherita Pizza",
-      "lunch": "Tomato Basil Soup",
-      "dinner": "Chicken Curry"
+      "breakfast": "-",
+      "lunch": "-",
+      "dinner": "-"
     },
     "Saturday": {
-      "breakfast": "Fish Tacos",
-      "lunch": "Pancetta Risotto",
-      "dinner": "Tomato Basil Soup"
+      "breakfast": "-",
+      "lunch": "-",
+      "dinner": "-"
     },
     "Sunday": {
-      "breakfast": "Pancakes",
-      "lunch": "Caesar Salad",
-      "dinner": "Omelette"
+      "breakfast": "-",
+      "lunch": "-",
+      "dinner": "-"
     }
   },
   "2025-W42": {
@@ -296,6 +296,43 @@
     }
   },
   "2025-W37": {
+    "Monday": {
+      "breakfast": "-",
+      "lunch": "-",
+      "dinner": "-"
+    },
+    "Tuesday": {
+      "breakfast": "-",
+      "lunch": "-",
+      "dinner": "-"
+    },
+    "Wednesday": {
+      "breakfast": "-",
+      "lunch": "-",
+      "dinner": "-"
+    },
+    "Thursday": {
+      "breakfast": "-",
+      "lunch": "-",
+      "dinner": "-"
+    },
+    "Friday": {
+      "breakfast": "-",
+      "lunch": "-",
+      "dinner": "-"
+    },
+    "Saturday": {
+      "breakfast": "-",
+      "lunch": "-",
+      "dinner": "-"
+    },
+    "Sunday": {
+      "breakfast": "-",
+      "lunch": "-",
+      "dinner": "-"
+    }
+  },
+  "2025-W45": {
     "Monday": {
       "breakfast": "-",
       "lunch": "-",
