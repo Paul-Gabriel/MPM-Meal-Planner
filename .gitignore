@@ -2,3 +2,5 @@
 *.pyc
 *.xml
 main_test.py
+.venv/
+.idea/
