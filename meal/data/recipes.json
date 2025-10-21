@@ -960,5 +960,28 @@
       "carbohydrates": 30,
       "fats": 10
     }
+  },
+  {
+    "name": "test",
+    "servings": 4,
+    "ingredients": [
+      {
+        "name": "beef",
+        "default_quantity": 100,
+        "unit": "g"
+      }
+    ],
+    "steps": [
+      "1 da",
+      "2 nu"
+    ],
+    "tags": [],
+    "image": "",
+    "calories_per_serving": 63.5,
+    "macros": {
+      "protein": 4.29,
+      "carbohydrates": 0.0,
+      "fats": 5.0
+    }
   }
 ]

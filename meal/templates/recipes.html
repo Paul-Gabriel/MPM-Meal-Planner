@@ -2,20 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Recipes</title>
-    <link rel="stylesheet" href="/static/style.css?ts={{ time }}">
+    <link rel="icon" type="image/png" href="/static/icons/logo.png">
+    <link rel="stylesheet" href="/static/style_R.css?ts={{ time }}">
 </head>
-<body class="bg">
+<body>
 <header>
     <div class="header-row">
-        <h1 style="flex:1; text-align:center;">All Recipes</h1>
-        <a href="/" class="back-btn">
-            <button class="main-btn small">Back to home page</button>
-        </a>
+        <div class="header-actions">
+            <a href="/" class="back-btn">
+                <button class="main-btn small">Back to home page</button>
+            </a>
+            <a href="/add-recipe" style="text-decoration:none;">
+                <button type="button" class="main-btn small secondary">Add Recipe</button>
+            </a>
+        </div>
+        <h1>All Recipes</h1>
     </div>
 </header>
+
 <div class="overlay">
-    <form method="get" class="sort-bar center-sort" id="filter-form" style="gap:18px; flex-wrap:wrap;">
+    <form method="get" class="sort-bar center-sort" id="filter-form">
         <label for="tag">Sort by tag:</label>
         <select name="tag" id="tag" onchange="document.getElementById('filter-form').submit()">
             <option value="">All</option>
@@ -23,7 +31,8 @@
                 <option value="{{ tag }}" {% if tag == selected_tag %}selected{% endif %}>{{ tag }}</option>
             {% endfor %}
         </select>
-        <label for="cols-select">By row </label>
+
+        <label for="cols-select">Columns:</label>
         <select id="cols-select" aria-label="By row(2-6)">
             <option value="2">2</option>
             <option value="3">3</option>
@@ -31,62 +40,79 @@
             <option value="5">5</option>
             <option value="6">6</option>
         </select>
-        <a href="/add-recipe">
-          <button type="button">+ Add Recipe</button>
-        </a>
+
+
     </form>
-    <!-- Grid dinamic -->
+
     <div class="recipes-grid" id="recipes-grid" style="--recipe-cols:2" data-cols="2">
         {% for recipe in recipes %}
         <div class="recipe-card large">
             <div class="recipe-card-left">
                 <div class="recipe-image">
-                    <a href="/recipe/{{ recipe.name | urlencode }}" title="View recipe details">
+                    <a href="/recipe/{{ recipe.name | urlencode }}">
                         <img src="/static/pictures/{{ recipe.image }}"
-                             alt="Recipe image"
+                             alt="{{ recipe.name }}"
                              onerror="this.onerror=null;this.src='/static/icons/logo.png';" />
-                        </a>
+                    </a>
                 </div>
                 <div class="recipe-title">
-                    <a href="/recipe/{{ recipe.name | urlencode }}" style="text-decoration:none; color:inherit;">{{ recipe.name }}</a>
+                    <a href="/recipe/{{ recipe.name | urlencode }}">{{ recipe.name }}</a>
                 </div>
             </div>
             <div class="recipe-card-right">
                 <table class="ingredients-table">
-                    <thead><tr><th>Ingredient</th></tr></thead>
+                    <thead><tr><th>Ingredients</th></tr></thead>
                     <tbody>
-                    {% for ingredient in recipe.ingredients %}
+                        {% for ingredient in recipe.ingredients %}
                         <tr><td>{{ ingredient }}</td></tr>
-                    {% endfor %}
+                        {% endfor %}
                     </tbody>
                 </table>
+
+
+                <div class="nutrition-info">
+                        {% if recipe.calories_per_serving %}
+                        <span class="calories">{{ recipe.calories_per_serving }} kcal / serving</span>
+                        {% endif %}
+                    {% if recipe.macros %}
+                        <span class="macros">
+                             P: {{ recipe.macros.protein }}g |
+                             C: {{ recipe.macros.carbohydrates }}g |
+                             F: {{ recipe.macros.fats }}g
+                        </span>
+                    {% endif %}
+                </div>
+
             </div>
         </div>
         {% endfor %}
     </div>
 </div>
+
 <script>
 (function(){
   const grid = document.getElementById('recipes-grid');
   const select = document.getElementById('cols-select');
   if(!grid || !select) return;
+
   const qs = new URLSearchParams(window.location.search);
-  const fromQS = parseInt(qs.get('cols')); // optional param dacă vrem să venim cu bookmark
+  const fromQS = parseInt(qs.get('cols'));
   const stored = parseInt(localStorage.getItem('recipesCols'));
   let cols = fromQS || stored || 2;
   if(isNaN(cols) || cols < 2 || cols > 6) cols = 2;
+
   function apply(c){
      c = Math.min(6, Math.max(2,c));
      grid.style.setProperty('--recipe-cols', c);
      grid.dataset.cols = String(c);
      select.value = String(c);
      localStorage.setItem('recipesCols', c);
-     // update URL without reload (keep the tag filter if present)
      qs.set('cols', c);
      const tagSel = document.getElementById('tag');
      if(tagSel && tagSel.value) qs.set('tag', tagSel.value); else qs.delete('tag');
      history.replaceState(null, '', window.location.pathname + '?' + qs.toString());
   }
+
   apply(cols);
   select.addEventListener('change', e => apply(parseInt(select.value)));
 })();

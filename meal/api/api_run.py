@@ -12,7 +12,6 @@ from uuid import uuid4
 from typing import Optional
 from fastapi import Response
 from fastapi import Body
-from meal.infra.Plan_Repository import PlanRepository
 from meal.infra.pdf_utils import generate_pdf_for_week
 from meal.logic.reporting.nutrition import compute_week_nutrition  # moved from services.Reporting_Service
 from meal.logic.pantry.analysis import compute_pantry_snapshots  # moved from services.pantry_analysis
@@ -297,27 +296,50 @@ else:
 @app.get("/recipes-page", response_class=HTMLResponse)
 def recipes_page(request: Request, tag: str = Query(default="", alias="tag")):
     recipes = load_recipes()
+
+    # colectăm toate tag-urile pentru dropdown
     all_tags = set()
     for r in recipes:
         all_tags.update(r.get('tags', []))
     tags = sorted(all_tags)
 
+    # aplicăm filtrarea dacă e selectat un tag
     filtered = [r for r in recipes if tag in r.get('tags', [])] if tag else recipes
 
     recipe_dicts = []
     for r in filtered:
+        # --- Ingrediente formatate ---
         ingredients = r.get('ingredients', [])
         formatted_ingredients = [
-            f"{i.get('name', '')}, {i.get('default_quantity', '')} {i.get('unit', '')}" for i in ingredients
+            f"{i.get('name', '')}, {i.get('default_quantity', '')} {i.get('unit', '')}".strip(", ")
+            for i in ingredients
         ]
+
+        # --- Imagine ---
         image_name = r.get('image') or (r.get('name', '').lower().replace(' ', '_') + '.jpg')
+
+        # --- Calorii + Macronutrienți ---
+        calories = r.get('calories_per_serving') or r.get('caloriesPerServing') or None
+        macros_raw = r.get('macros', {}) or {}
+
+        macros = {
+            "protein": macros_raw.get("protein", 0),
+            "carbohydrates": macros_raw.get("carbohydrates", macros_raw.get("carbs", 0)),
+            "fats": macros_raw.get("fats", macros_raw.get("fat", 0)),
+        }
+
+        # --- Construcția finală a dicționarului ---
         recipe_dicts.append({
             "name": r.get('name', ''),
             "servings": r.get('servings', ''),
             "ingredients": formatted_ingredients,
-            "image": image_name
+            "image": image_name,
+            "tags": r.get('tags', []),
+            "calories_per_serving": calories,
+            "macros": macros,
         })
 
+    # --- Returnăm template-ul complet ---
     return templates.TemplateResponse(
         "recipes.html",
         {
@@ -328,6 +350,7 @@ def recipes_page(request: Request, tag: str = Query(default="", alias="tag")):
             "time": _ts()
         }
     )
+
 
 # -------------------- Camara (pantry) --------------------
 @app.get("/camara", response_class=HTMLResponse)

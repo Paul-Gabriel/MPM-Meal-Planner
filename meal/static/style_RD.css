@@ -1,0 +1,271 @@
+/* === GLOBAL RESET === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: auto;
+  min-height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+/* === BACKGROUND & OVERLAY === */
+body.bg {
+  position: relative;
+  min-height: 100%;
+  background: url('/static/background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: #222;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 0; /* stă sub tot conținutul */
+}
+
+/* === HEADER === */
+header {
+  position: relative;
+  z-index: 10; /* ridică headerul peste overlay */
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.95);
+  width: 100%;
+  padding: 20px 0 10px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.header-actions {
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 10px;
+}
+
+h1 {
+  font-size: 2.2em;
+  color: #333;
+  text-align: center;
+}
+
+/* === BUTTONS === */
+.main-btn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.main-btn:hover {
+  background: #388E3C;
+}
+
+.main-btn.small {
+  padding: 8px 14px;
+  font-size: 0.9em;
+}
+
+.main-btn.secondary {
+  background: white;
+  color: #2e7d32;
+  border: 2px solid #4CAF50;
+}
+
+.main-btn.secondary:hover {
+  background: #e8f5e9;
+}
+
+/* === OVERLAY (CONȚINUT) === */
+.overlay {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  padding-top: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* === SORT BAR === */
+.sort-bar {
+  background: white;
+  border-radius: 16px;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.sort-bar label {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.sort-bar select {
+  padding: 0.5rem 0.8rem;
+  border: 2px solid #4CAF50;
+  border-radius: 8px;
+  background: white;
+  font-size: 0.9rem;
+  color: #2e7d32;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sort-bar select:hover {
+  border-color: #ff9800;
+}
+
+/* === GRID REȚETE === */
+.recipes-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--recipe-cols, 2), 1fr);
+  gap: 2rem;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto 3rem auto;
+  padding: 0 1rem;
+}
+
+/* === CARD REȚETĂ === */
+.recipe-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.recipe-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.recipe-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.recipe-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.recipe-card:hover .recipe-image img {
+  transform: scale(1.05);
+}
+
+.recipe-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2e7d32;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.recipe-title a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s ease;
+}
+
+.recipe-title a:hover {
+  color: #ff9800;
+}
+
+/* === INGREDIENTS TABLE === */
+.ingredients-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fafafa;
+}
+
+.ingredients-table th {
+  background: #4CAF50;
+  color: white;
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.ingredients-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e0e0e0;
+  color: #2e7d32;
+}
+
+.ingredients-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* === NUTRITION INFO === */
+.nutrition-info {
+  margin-top: 0.8rem;
+  padding-top: 0.6rem;
+  border-top: 1px dashed #c8e6c9;
+  font-size: 0.85rem;
+  color: #4e8b4e;
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+
+.recipe-card:hover .nutrition-info {
+  opacity: 1;
+}
+
+.nutrition-info span {
+  background: rgba(76,175,80,0.08);
+  border-radius: 8px;
+  padding: 0.3rem 0.6rem;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 900px) {
+  h1 {
+    font-size: 1.8em;
+  }
+
+  .recipes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header-actions {
+    left: 10px;
+  }
+}

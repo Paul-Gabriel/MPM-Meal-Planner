@@ -17,7 +17,6 @@ body {
     z-index: 1;
 }
 
-/* Dark overlay for better readability */
 body::before {
     content: "";
     position: fixed;

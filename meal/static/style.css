@@ -1,12 +1,13 @@
 body.bg {
-    /* Revert to original background with image + cover */
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    background: url('/static/background.jpg') no-repeat center center fixed;
-    background-size: cover;
-    font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background: url('/static/background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  font-family: Arial, sans-serif;
+  position: relative; /* important pentru overlay */
 }
+
 
 .header-row {
     display: flex;
@@ -37,16 +38,17 @@ h1 {
     width: 100%;
 }
 .overlay {
-    /* Revert: whitish transparent background, no frame */
-    /* remove border & extra shadow added earlier */
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding-top: 100px;
-    overflow-y: auto;
-    height: 100vh;
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  /* height: 100vh; ← scoate asta */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-top: 100px;
+  overflow-y: visible; /* sau auto dacă vrei scroll intern */
 }
+
 .main-btn {
     padding: 20px 0;
     width: 350px;
