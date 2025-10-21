@@ -3,6 +3,7 @@ import os
 import logging
 from openai import OpenAI
 from meal.domain.Recipe import Recipe
+from meal.infra.Recipe_Repository import reading_from_recipes
 from meal.utilities.constants import PRROMPT_TEMPLATE, RECIPE_JSON_FORMAT
 import json
 import re
@@ -48,6 +49,30 @@ def create_recipe_from_ai(prompt: str='') -> Recipe | None:
     if client is None:
         logger.warning("OPENAI_API_KEY not set — cannot create recipe from AI.")
         return None
+
+    if not prompt:
+        try:
+            recipes = reading_from_recipes()
+            items = recipes.values() if isinstance(recipes, dict) else (
+            recipes if isinstance(recipes, (list, tuple)) else ([recipes] if recipes is not None else [])
+            )
+
+            names = []
+            for r in items:
+                if r is None:
+                    continue
+            if isinstance(r, dict):
+                name = r.get("name") or r.get("title") or r.get("recipe_name")
+            else:
+                name = getattr(r, "name", None) or getattr(r, "title", None)
+            if name:
+                names.append(str(name))
+
+            prompt = ", ".join(sorted(set(names))) if names else ""
+            prompt = prompt + " Make a different recipe that is not listed here."
+        except Exception:
+            logger.exception("Failed to build recipe names string from repository")
+            prompt = ""
 
     response = client.responses.create(
         model="gpt-4o-mini",
