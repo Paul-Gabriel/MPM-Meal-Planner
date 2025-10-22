@@ -1,45 +1,63 @@
-from fastapi import FastAPI, Request, Query, Form, APIRouter, HTTPException
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi import (
+    FastAPI,
+    Request,
+    Query,
+    Form,
+    APIRouter,
+    HTTPException,
+    Response,
+    Body
+)
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+
 from pathlib import Path
-import logging
 from pydantic import BaseModel
-from datetime import datetime, timedelta
-from datetime import date as _date
-import json
+from datetime import datetime, timedelta, date as _date
 from uuid import uuid4
 from typing import Optional
-from fastapi import Response
-from fastapi import Body
+import logging
+import json
+
 from meal.infra.pdf_utils import generate_pdf_for_week
 from meal.logic.reporting.nutrition import compute_week_nutrition  # moved from services.Reporting_Service
-from meal.logic.pantry.analysis import compute_pantry_snapshots  # moved from services.pantry_analysis
-
-# Fully-qualified imports (run from project root)
+from meal.logic.pantry.analysis import compute_pantry_snapshots   # moved from services.pantry_analysis
 from meal.infra.Plan_Repository import PlanRepository
 from meal.api.routes.recipes import load_recipes
 from meal.api.routes.pantry import load_ingredients, save_ingredients
 from meal.api.routes.logs import load_cooked_recipes, save_cooked_recipes
-from meal.logic.shopping.list_builder import build_shopping_list  # moved from rules.Shopping_List_Builder
-from meal.utilities.constants import DATE_FORMAT
+from meal.logic.shopping.list_builder import build_shopping_list   # moved from rules.Shopping_List_Builder
+from meal.utilities.constants import DATE_FORMAT, LOW_STOCK_THRESHOLD, DAYS_BEFORE_EXPIRY
 from meal.events.event_helpers import (
     publish_expiring_snapshot,
-    publish_low_stock, publish_near_expiry
-)  # optional, non-critical
+    publish_low_stock,
+    publish_near_expiry
+)
 from meal.events.web_observers import start as start_event_observers, get_events as get_web_events
-from meal.utilities.constants import LOW_STOCK_THRESHOLD, DAYS_BEFORE_EXPIRY
-from fastapi.responses import RedirectResponse
 
+# Routers
 from meal.api.routes import add
+from meal.api.api_ai import router as ai_router
+from dotenv import load_dotenv
+load_dotenv()
+
+# Logging
 logger = logging.getLogger("meal_app")
 
+# Constants
 ALLOWED_START = _date(2025, 9, 1)
-ALLOWED_END   = _date(2026, 12, 31)
+ALLOWED_END = _date(2026, 12, 31)
 DEFAULT_EXP_DELTA_DAYS = 7  # default extra days for new bought ingredient expiration
+
 DAY_TO_ISO = {
-    "Monday": 1, "Tuesday": 2, "Wednesday": 3,
-    "Thursday": 4, "Friday": 5, "Saturday": 6, "Sunday": 7,
+    "Monday": 1,
+    "Tuesday": 2,
+    "Wednesday": 3,
+    "Thursday": 4,
+    "Friday": 5,
+    "Saturday": 6,
+    "Sunday": 7,
 }
 
 # Detect multipart support
@@ -50,17 +68,22 @@ except Exception:
     _HAS_MULTIPART = False
     logger.warning("python-multipart not available; /update_meal will accept JSON body instead of form-data.")
 
+# Initialize FastAPI app
 app = FastAPI(title="Meal Planner & Pantry API")
 router = APIRouter()
 
-# Static files
+# Include routers
 app.include_router(add.router)
+app.include_router(ai_router)
+
+# Static files
 static_dir = (Path(__file__).parent.parent / 'static').resolve()
 app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
 # Templates
 templates_dir = (Path(__file__).parent.parent / 'templates').resolve()
 templates = Jinja2Templates(directory=str(templates_dir))
+
 
 
 @app.on_event("startup")

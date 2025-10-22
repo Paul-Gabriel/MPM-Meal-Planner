@@ -5,235 +5,425 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Recipe</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+      /* === GLOBAL RESETS === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-image: url('/static/background.jpg');
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-      min-height: 100vh;
-      padding: 20px;
-      position: relative; /* required for overlay */
-    }
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: url('/static/background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+  padding: 20px;
+  position: relative;
+}
 
-    /* Dark overlay */
-    body::before {
-      content: "";
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5); /* 0.5 = 50% opacity */
-      z-index: 0;
-    }
+/* Dark overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 0;
+}
 
-    .container {
-      position: relative;
-      z-index: 1; /* form above the overlay */
-      max-width: 800px;
-      margin: 0 auto;
-      background: rgba(255, 255, 255, 0.97);
-      border-radius: 20px;
-      padding: 40px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(10px);
-    }
+/* === MAIN CONTAINER === */
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+}
 
-    h2 {
-      color: #4caf50;
-      font-size: 2.5em;
-      margin-bottom: 20px;
-      text-align: center;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    }
+/* === TITLES === */
+h2 {
+  color: #4caf50;
+  font-size: 2.5em;
+  margin-bottom: 20px;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
 
-    h3 {
-      color: #ff8c42;
-      font-size: 1.5em;
-      margin: 25px 0 15px 0;
-      padding-bottom: 10px;
-      border-bottom: 3px solid #4caf50;
-    }
+h3 {
+  color: #ff8c42;
+  font-size: 1.5em;
+  margin: 25px 0 15px 0;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #4caf50;
+}
 
-    label {
-      display: block;
-      color: #4caf50;
-      font-weight: 600;
-      margin-bottom: 8px;
-      font-size: 1.1em;
-    }
+/* === LABELS & INPUTS === */
+label {
+  display: block;
+  color: #4caf50;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 1.1em;
+}
 
-    input[type="text"],
-    input[type="number"],
-    textarea {
-      width: 100%;
-      padding: 12px 15px;
-      border: 2px solid #ddd;
-      border-radius: 10px;
-      font-size: 1em;
-      margin-bottom: 15px;
-      transition: all 0.3s ease;
-      background: white;
-    }
+input[type="text"],
+input[type="number"],
+textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  font-size: 1em;
+  margin-bottom: 15px;
+  background: #fff;
+  transition: all 0.3s ease;
+}
 
-    input[type="text"]:focus,
-    input[type="number"]:focus,
-    textarea:focus {
-      outline: none;
-      border-color: #ff8c42;
-      box-shadow: 0 0 10px rgba(255, 140, 66, 0.3);
-    }
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: #ff8c42;
+  box-shadow: 0 0 10px rgba(255, 140, 66, 0.3);
+}
 
-    .ingredient-row {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr auto;
-      gap: 10px;
-      margin-bottom: 10px;
-      align-items: start;
-    }
+/* === INGREDIENT ROW === */
+.ingredient-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: start;
+}
 
-    .btn-remove {
-      background: #e74c3c;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 15px;
-      cursor: pointer;
-      font-size: 1.2em;
-      transition: all 0.3s ease;
-      height: 46px;
-    }
+/* === REMOVE BUTTON === */
+.btn-remove {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 15px;
+  cursor: pointer;
+  font-size: 1.2em;
+  transition: all 0.3s ease;
+  height: 46px;
+}
+.btn-remove:hover {
+  background: #c0392b;
+  transform: scale(1.05);
+}
 
-    .btn-remove:hover {
-      background: #c0392b;
-      transform: scale(1.05);
-    }
+/* === GENERIC BUTTONS === */
+button[type="button"] {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 1.1em;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+button[type="button"]:hover {
+  background: #66bb6a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
 
-    button[type="button"] {
-      background: #4caf50;
-      color: white;
-      border: none;
-      padding: 12px 30px;
-      font-size: 1.1em;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 600;
-      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
-    }
+/* === SUBMIT BUTTON === */
+button[type="submit"] {
+  width: 100%;
+  background: #ff8c42;
+  color: white;
+  border: none;
+  padding: 18px;
+  font-size: 1.3em;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 700;
+  margin-top: 30px;
+  box-shadow: 0 6px 20px rgba(255, 140, 66, 0.4);
+}
+button[type="submit"]:hover {
+  background: #ff6b35;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 140, 66, 0.5);
+}
 
-    button[type="button"]:hover {
-      background: #66bb6a;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
-    }
+/* === IMAGE UPLOAD === */
+.image-upload-area {
+  border: 3px dashed #4caf50;
+  border-radius: 15px;
+  padding: 40px;
+  text-align: center;
+  background: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.image-upload-area:hover,
+.image-upload-area.dragover {
+  border-color: #ff8c42;
+  background: #fff;
+  transform: scale(1.02);
+}
+.image-upload-area input[type="file"] {
+  display: none;
+}
+.image-preview {
+  margin-top: 20px;
+  display: none;
+}
+.image-preview.show {
+  display: block;
+}
+.image-preview img {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+.image-preview-name {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #666;
+  font-style: italic;
+}
+.remove-image-btn {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 0.9em;
+  transition: all 0.3s ease;
+}
+.remove-image-btn:hover {
+  background: #c0392b;
+}
 
-    button[type="submit"] {
-      width: 100%;
-      background: #ff8c42;
-      color: white;
-      border: none;
-      padding: 18px;
-      font-size: 1.3em;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 700;
-      margin-top: 30px;
-      box-shadow: 0 6px 20px rgba(255, 140, 66, 0.4);
-    }
+/* === TOP BUTTONS (Back + AI) === */
+.top-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+.back-btn {
+  background: #4caf50;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 1.1em;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+.back-btn:hover {
+  background: #66bb6a;
+  transform: translateY(-2px);
+}
 
-    button[type="submit"]:hover {
-      background: #ff6b35;
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(255, 140, 66, 0.5);
-    }
+/* === AI BUTTON (Gradient Magic) === */
+.ai-btn {
+  background: linear-gradient(270deg, #0072ff, #8e2de2, #ff00cc);
+  background-size: 600% 600%;
+  color: #fff !important;
+  padding: 12px 28px;
+  font-size: 1.05em;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(142, 45, 226, 0.5);
+  transition: all 0.4s ease;
+  animation: gradientFlow 5s ease infinite;
+}
+.ai-btn:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 25px rgba(255, 0, 204, 0.6);
+}
 
-    textarea {
-      resize: vertical;
-      min-height: 120px;
-      font-family: inherit;
-    }
+/* === AI MODAL === */
+.ai-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+}
+.ai-modal-content {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  width: 400px;
+  max-width: 90%;
+  margin: 15% auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease;
+  position: relative;
+}
+.ai-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.8em;
+  color: #666;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.ai-close:hover {
+  color: #e74c3c;
+}
 
-    .image-upload-area {
-      border: 3px dashed #4caf50;
-      border-radius: 15px;
-      padding: 40px;
-      text-align: center;
-      background: #f8f9fa;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-    }
+/* === ANIMATIONS === */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes gradientFlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 
-    .image-upload-area:hover {
-      border-color: #ff8c42;
-      background: #fff;
-      transform: scale(1.02);
-    }
+      /* === AI Generate button (inside modal) === */
+#generate-ai {
+  background: linear-gradient(90deg, #0072ff, #8e2de2, #ff00cc);
+  background-size: 300% 300%;
+  animation: aiGradientShift 6s ease infinite;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 26px;
+  font-size: 1em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(142, 45, 226, 0.4);
+  width: 100%;
+  margin-top: 10px;
+}
 
-    .image-upload-area.dragover {
-      border-color: #ff8c42;
-      background: #fff5e6;
-      transform: scale(1.02);
-    }
+/* Hover: glow & lift */
+#generate-ai:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(255, 0, 204, 0.5);
+}
 
-    .image-upload-area input[type="file"] {
-      display: none;
-    }
+/* Active (click) */
+#generate-ai:active {
+  transform: scale(0.98);
+  box-shadow: 0 0 10px rgba(142, 45, 226, 0.3);
+}
 
-    .image-preview {
-      margin-top: 20px;
-      display: none;
-    }
+.ai-modal-content h3 {
+  background: linear-gradient(90deg, #0072ff, #8e2de2, #ff00cc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  font-size: 1.4em;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  animation: aiGradientShift 6s ease infinite;
+  position: relative;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
 
-    .image-preview.show {
-      display: block;
-    }
+/* Gradient line under title */
+.ai-modal-content h3::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 3px;
+  background: linear-gradient(90deg, #0072ff, #8e2de2, #ff00cc);
+  background-size: 300% 300%;
+  border-radius: 2px;
+  animation: aiGradientShift 6s ease infinite;
+}
+.ai-modal-content h3 {
+  border-bottom: none !important; /* elimină linia verde */
+}
 
-    .image-preview img {
-      max-width: 100%;
-      max-height: 300px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
+      .ai-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 10px;
+}
 
-    .image-preview-name {
-      margin-top: 10px;
-      font-size: 0.9em;
-      color: #666;
-      font-style: italic;
-    }
+.ai-loader-text {
+  font-weight: 700;
+  font-size: 1.1em;
+  background: linear-gradient(90deg, #0072ff, #8e2de2, #ff00cc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: aiGradientShift 4s ease infinite;
+}
 
-    .remove-image-btn {
-      background: #e74c3c;
-      color: white;
-      border: none;
-      padding: 8px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 10px;
-      font-size: 0.9em;
-      transition: all 0.3s ease;
-    }
+.dots::after {
+  content: '';
+  animation: dots 1.5s steps(4, end) infinite;
+}
 
-    .remove-image-btn:hover {
-      background: #c0392b;
-    }
+@keyframes dots {
+  0%, 20% { content: ''; }
+  40% { content: '.'; }
+  60% { content: '..'; }
+  80%, 100% { content: '...'; }
+}
+
+@keyframes aiGradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
   </style>
 </head>
 <body>
   <div class="container">
     <h2>Add Recipe</h2>
-    <a href="/recipes-page" style="text-decoration:none;">
-      <button type="button" style="background:#4caf50; margin-bottom:20px;">
-        ← Back to Recipes
-      </button>
-    </a>
+<div class="top-buttons">
+  <a href="/recipes-page" style="text-decoration:none;">
+    <button type="button" class="back-btn">
+      ← Back to Recipes
+    </button>
+  </a>
+
+  <button type="button" id="open-ai-modal" class="ai-btn">
+    Create recipe using AI
+  </button>
+</div>
+
+<!-- Popup-ul pentru AI prompt -->
+<div id="aiModal" class="ai-modal">
+  <div class="ai-modal-content">
+    <span class="ai-close">&times;</span>
+    <h3 style="color:#4caf50; margin-bottom:15px;">Generate Recipe with AI</h3>
+    <input type="text" id="ai-prompt" placeholder="Describe your recipe idea (e.g. chicken pasta with veggies)" style="width:100%; padding:12px; border-radius:10px; border:2px solid #ddd; margin-bottom:15px;">
+    <button id="generate-ai" class="green-btn">Generate</button>
+      <div id="ai-loader" class="ai-loader" style="display:none;">
+  <p class="ai-loader-text">AI is cooking your recipe. Let him cook<span class="dots"></span></p>
+</div>
+
+  </div>
+</div>
 
     <form id="recipeForm">
       <div class="input-group">
@@ -272,83 +462,175 @@
     </form>
   </div>
 
-  <script>
-    let ingredientIndex = 0;
-    const uploadArea = document.getElementById('imageUploadArea');
-    const fileInput = document.getElementById('imageFile');
-    const imagePreview = document.getElementById('imagePreview');
-    const previewImg = document.getElementById('previewImg');
-    const imageName = document.getElementById('imageName');
+<script>
+  // === GLOBAL VARS ===
+  let ingredientIndex = 0;
+  const aiModal = document.getElementById("aiModal");
+  const openAIModal = document.getElementById("open-ai-modal");
+  const closeAIModal = document.querySelector(".ai-close");
+  const generateBtn = document.getElementById("generate-ai");
+  const aiLoader = document.getElementById("ai-loader");
 
-    // Image upload
-    uploadArea.addEventListener('click', () => fileInput.click());
-    uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
-    uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
-    uploadArea.addEventListener('drop', e => {
-      e.preventDefault(); uploadArea.classList.remove('dragover');
-      if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
-    });
-    fileInput.addEventListener('change', e => { if (e.target.files.length > 0) handleFile(e.target.files[0]); });
+  // === IMAGE UPLOAD ===
+  const uploadArea = document.getElementById('imageUploadArea');
+  const fileInput = document.getElementById('imageFile');
+  const imagePreview = document.getElementById('imagePreview');
+  const previewImg = document.getElementById('previewImg');
+  const imageName = document.getElementById('imageName');
 
-    function handleFile(file) {
-      if (!file.type.startsWith('image/')) return alert('Please upload an image file');
-      const reader = new FileReader();
-      reader.onload = e => {
-        previewImg.src = e.target.result;
-        imageName.textContent = file.name;
-        imagePreview.classList.add('show');
-      };
-      reader.readAsDataURL(file);
+  uploadArea.addEventListener('click', () => fileInput.click());
+  uploadArea.addEventListener('dragover', e => {
+    e.preventDefault();
+    uploadArea.classList.add('dragover');
+  });
+  uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+  uploadArea.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadArea.classList.remove('dragover');
+    if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+  });
+  fileInput.addEventListener('change', e => {
+    if (e.target.files.length > 0) handleFile(e.target.files[0]);
+  });
+
+  function handleFile(file) {
+    if (!file.type.startsWith('image/')) return alert('Please upload an image file');
+    const reader = new FileReader();
+    reader.onload = e => {
+      previewImg.src = e.target.result;
+      imageName.textContent = file.name;
+      imagePreview.classList.add('show');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function removeImage() {
+    previewImg.src = '';
+    imageName.textContent = '';
+    imagePreview.classList.remove('show');
+    fileInput.value = '';
+  }
+
+  // === INGREDIENTS ===
+  function addIngredient() {
+    const div = document.createElement("div");
+    div.className = "ingredient-row";
+    div.innerHTML = `
+      <input type="text" placeholder="Ingredient name" id="ingredient-name-${ingredientIndex}">
+      <input type="number" placeholder="Qty" id="ingredient-qty-${ingredientIndex}" step="0.1">
+      <input type="text" placeholder="Unit" id="ingredient-unit-${ingredientIndex}">
+      <button type="button" class="btn-remove" onclick="removeIngredient(this)">✕</button>
+    `;
+    document.getElementById("ingredients").appendChild(div);
+    ingredientIndex++;
+  }
+
+  function removeIngredient(btn) {
+    btn.parentElement.remove();
+  }
+
+  addIngredient();
+
+  // === MODAL LOGIC ===
+  openAIModal.onclick = () => { aiModal.style.display = "block"; };
+  closeAIModal.onclick = () => { aiModal.style.display = "none"; };
+  window.onclick = (event) => { if (event.target === aiModal) aiModal.style.display = "none"; };
+
+  // === AI GENERATION ===
+  generateBtn.addEventListener("click", async (event) => {
+    event.preventDefault();
+    const prompt = document.getElementById("ai-prompt").value.trim();
+    if (!prompt) {
+      alert("Please describe your recipe idea first!");
+      return;
     }
-    function removeImage() { previewImg.src = ''; imageName.textContent = ''; imagePreview.classList.remove('show'); fileInput.value = ''; }
 
-    function addIngredient() {
-      const div = document.createElement("div");
-      div.className = "ingredient-row";
-      div.innerHTML = `
-        <input type="text" placeholder="Ingredient name" id="ingredient-name-${ingredientIndex}">
-        <input type="number" placeholder="Qty" id="ingredient-qty-${ingredientIndex}" step="0.1">
-        <input type="text" placeholder="Unit" id="ingredient-unit-${ingredientIndex}">
-        <button type="button" class="btn-remove" onclick="removeIngredient(this)">✕</button>
-      `;
-      document.getElementById("ingredients").appendChild(div);
-      ingredientIndex++;
-    }
-    function removeIngredient(btn) { btn.parentElement.remove(); }
+    // 🔥 Show loader, hide button
+    generateBtn.style.display = "none";
+    aiLoader.style.display = "flex";
 
-    // Submit
-    document.getElementById('recipeForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      let ingredients = [];
-      document.querySelectorAll('.ingredient-row').forEach(row => {
-        const inputs = row.querySelectorAll('input');
-        let name = inputs[0].value, qty = inputs[1].value, unit = inputs[2].value;
-        if (name && qty && unit) ingredients.push({ name, default_quantity: parseFloat(qty), unit });
+    try {
+      const response = await fetch("/generate-recipe-ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt }),
       });
 
-      const formData = new FormData();
-      formData.append("name", document.getElementById('name').value.trim());
-      formData.append("servings", document.getElementById('servings').value);
-      formData.append("steps", document.getElementById('steps').value);
-      formData.append("tags", document.getElementById('tags').value);
-      formData.append("ingredients", JSON.stringify(ingredients));
-      if (fileInput.files.length > 0) formData.append("image", fileInput.files[0]);
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.detail || "Failed to generate recipe");
 
-      try {
-        const response = await fetch('/recipes', { method: 'POST', body: formData });
-        const data = await response.json();
-        if (!response.ok || data.status === "error") {
-          alert(data.message || "Something went wrong!");
-        } else {
-          alert("Recipe saved successfully!");
-          window.location.href = "/recipes-page";
-        }
-      } catch (err) {
-        alert("Network error. Please try again.");
-      }
+      // === Populate fields ===
+      document.getElementById("name").value = data.name || "";
+      document.getElementById("servings").value = data.servings || 1;
+      document.getElementById("steps").value = Array.isArray(data.steps)
+        ? data.steps.join("\n")
+        : data.steps || "";
+      document.getElementById("tags").value = (data.tags || []).join(", ");
+
+      // === Populate ingredients ===
+      const ingredientsDiv = document.getElementById("ingredients");
+      ingredientsDiv.innerHTML = "";
+      ingredientIndex = 0;
+      (data.ingredients || []).forEach(ing => {
+        const div = document.createElement("div");
+        div.className = "ingredient-row";
+        div.innerHTML = `
+          <input type="text" placeholder="Ingredient name" id="ingredient-name-${ingredientIndex}" value="${ing.name || ''}">
+          <input type="number" placeholder="Qty" id="ingredient-qty-${ingredientIndex}" step="0.1" value="${ing.default_quantity || ''}">
+          <input type="text" placeholder="Unit" id="ingredient-unit-${ingredientIndex}" value="${ing.unit || ''}">
+          <button type="button" class="btn-remove" onclick="removeIngredient(this)">✕</button>
+        `;
+        ingredientsDiv.appendChild(div);
+        ingredientIndex++;
+      });
+
+      // ✅ Hide loader, restore button, close modal
+      aiLoader.style.display = "none";
+      generateBtn.style.display = "block";
+      aiModal.style.display = "none";
+
+      alert("✅ Recipe generated successfully!");
+    } catch (err) {
+      aiLoader.style.display = "none";
+      generateBtn.style.display = "block";
+      alert("Error generating recipe: " + err.message);
+    }
+  });
+
+  // === FORM SUBMIT ===
+  document.getElementById('recipeForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    let ingredients = [];
+    document.querySelectorAll('.ingredient-row').forEach(row => {
+      const inputs = row.querySelectorAll('input');
+      let name = inputs[0].value, qty = inputs[1].value, unit = inputs[2].value;
+      if (name && qty && unit)
+        ingredients.push({ name, default_quantity: parseFloat(qty), unit });
     });
 
-    addIngredient();
-  </script>
+    const formData = new FormData();
+    formData.append("name", document.getElementById('name').value.trim());
+    formData.append("servings", document.getElementById('servings').value);
+    formData.append("steps", document.getElementById('steps').value);
+    formData.append("tags", document.getElementById('tags').value);
+    formData.append("ingredients", JSON.stringify(ingredients));
+    if (fileInput.files.length > 0) formData.append("image", fileInput.files[0]);
+
+    try {
+      const response = await fetch('/recipes', { method: 'POST', body: formData });
+      const data = await response.json();
+
+      if (!response.ok || data.status === "error") {
+        alert(data.message || "Something went wrong!");
+      } else {
+        alert("Recipe saved successfully!");
+        window.location.href = "/recipes-page";
+      }
+    } catch (err) {
+      alert("Network error. Please try again.");
+    }
+  });
+</script>
 </body>
 </html>
