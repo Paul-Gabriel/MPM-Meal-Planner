@@ -2,3 +2,4 @@
 *.xml
 main_test.py
 .venv/
+.env
