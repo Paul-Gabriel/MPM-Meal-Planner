@@ -1,12 +1,12 @@
 [
   {
     "name": "Spaghetti",
-    "default_quantity": 200,
     "unit": "g",
+    "default_quantity": 200,
+    "data_expirare": "22-03-2027",
     "tags": [
       "pasta"
-    ],
-    "data_expirare": "22-03-2027"
+    ]
   },
   {
     "name": "Rice",
@@ -54,18 +54,9 @@
     ]
   },
   {
-    "name": "Tomatoes",
-    "unit": "pcs",
-    "default_quantity": 6,
-    "data_expirare": "29-09-2025",
-    "tags": [
-      "vegetables"
-    ]
-  },
-  {
     "name": "Garlic",
     "unit": "cloves",
-    "default_quantity": 4,
+    "default_quantity": 2,
     "data_expirare": "21-12-2025",
     "tags": [
       "vegetables"
@@ -244,32 +235,68 @@
   },
   {
     "name": "Ground beef",
-    "default_quantity": 500,
     "unit": "g",
+    "default_quantity": 500,
     "data_expirare": "13-10-2025",
     "tags": [
       "meat-beef"
-    ],
-    "batch_id": "93f8cd50-d55b-4d9e-bb86-f4333625a4d8"
+    ]
   },
   {
     "name": "Onion",
-    "default_quantity": 2,
     "unit": "pcs",
+    "default_quantity": 1,
     "data_expirare": "13-10-2025",
     "tags": [
       "vegetables"
-    ],
-    "batch_id": "93f8cd50-d55b-4d9e-bb86-f4333625a4d8"
+    ]
   },
   {
     "name": "Spaghetti",
-    "default_quantity": 300,
     "unit": "g",
+    "default_quantity": 300,
     "data_expirare": "13-10-2025",
     "tags": [
       "pasta"
+    ]
+  },
+  {
+    "name": "Tomato",
+    "unit": "pcs",
+    "default_quantity": 6,
+    "data_expirare": "29-10-2025",
+    "tags": [
+      "vegetables"
+    ]
+  },
+  {
+    "name": "Chicken breast",
+    "default_quantity": 1000,
+    "unit": "g",
+    "data_expirare": "29-10-2025",
+    "tags": [
+      "meat-chicken"
     ],
-    "batch_id": "93f8cd50-d55b-4d9e-bb86-f4333625a4d8"
+    "batch_id": "88148cb2-c90b-46d0-b865-b50455938bb9"
+  },
+  {
+    "name": "Coconut milk",
+    "default_quantity": 800,
+    "unit": "ml",
+    "data_expirare": "29-10-2025",
+    "tags": [
+      "dairy"
+    ],
+    "batch_id": "88148cb2-c90b-46d0-b865-b50455938bb9"
+  },
+  {
+    "name": "Curry paste",
+    "default_quantity": 100,
+    "unit": "g",
+    "data_expirare": "29-10-2025",
+    "tags": [
+      "other"
+    ],
+    "batch_id": "88148cb2-c90b-46d0-b865-b50455938bb9"
   }
 ]

@@ -46,5 +46,20 @@
     "servings": 4,
     "quantity": 4,
     "unit": "pcs"
+  },
+  {
+    "name": "Tomato Soup",
+    "date_cooked": "22-10-2025",
+    "day": "Wednesday",
+    "meal": "lunch",
+    "overrides": {
+      "Tomato": 6,
+      "Onion": 1,
+      "Garlic": 2,
+      "Vegetable stock": 500
+    },
+    "servings": 3,
+    "quantity": 3,
+    "unit": "pcs"
   }
 ]

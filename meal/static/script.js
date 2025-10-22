@@ -164,51 +164,50 @@ function selectWeek(mondayDate) {
 
 // ---------- Update only labels + recipe spans + hidden week/year ----------
 // Inject helper before updateTable so it can be reused by deleteMeal as well.
-function adjustMealButtons(day, meal, rawVal, dateStr){
+function adjustMealButtons(day, meal, rawVal, dateStr) {
   const cell = document.getElementById(`${day}-${meal}`);
-  if(!cell) return;
-  // Remove any previous action buttons or menus except popup & slot span & add button if reused
-  Array.from(cell.querySelectorAll('.slot-actions-btn, .cook-btn, .del-btn, .slot-action-menu, button:not(.add-btn)'))
-    .forEach(btn => {
-      if(btn.id && btn.id.endsWith('-popup')) return;
-    });
-  // Clean old action buttons (keep Add if present and slot is empty)
-  Array.from(cell.children).forEach(ch => {
-    if(ch.classList && (ch.classList.contains('slot-actions-btn') || ch.classList.contains('cook-btn') || ch.classList.contains('del-btn'))){
-      ch.remove();
+  if (!cell) return;
+
+  // 🔧 1️⃣ Curăță doar butoanele din celulă (Add / Actions), dar NU pe cele din popup
+  Array.from(cell.children).forEach(child => {
+    if (child.tagName === 'BUTTON' && !child.closest('.popup')) {
+      child.remove();
     }
   });
+
   const isEmpty = (!rawVal || rawVal === '-');
   const isCooked = (typeof rawVal === 'object' && rawVal && rawVal.cooked);
-  if(isCooked){
-    return; // no actions after cooked
-  }
-  if(isEmpty){
-    // ensure Add button exists (template already adds for server render); if missing create
-    if(!cell.querySelector('.add-btn')){
-      const addBtn = document.createElement('button');
-      addBtn.type='button'; addBtn.textContent='Add'; addBtn.className='add-btn';
-      addBtn.onclick = () => openModal(day, meal);
-      cell.appendChild(addBtn);
-    }
+
+  // 🔧 2️⃣ Dacă e gătit, nu afișăm nimic
+  if (isCooked) return;
+
+  // 🔧 3️⃣ Dacă e gol, afișăm doar butonul Add
+  if (isEmpty) {
+    const addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.textContent = 'Add';
+    addBtn.className = 'add-btn';
+    addBtn.onclick = () => openModal(day, meal);
+    cell.appendChild(addBtn);
     return;
   }
-  // If we have a recipe planned (string) not cooked, add unified Actions button
+
+  // 🔧 4️⃣ Dacă există o rețetă planificată, afișăm doar Actions ▾
   const actionsBtn = document.createElement('button');
-  actionsBtn.type='button';
-  actionsBtn.className='slot-actions-btn';
+  actionsBtn.type = 'button';
+  actionsBtn.className = 'slot-actions-btn';
   actionsBtn.dataset.day = day;
   actionsBtn.dataset.meal = meal;
   actionsBtn.dataset.date = dateStr || cell.getAttribute('data-date') || '';
   actionsBtn.textContent = 'Actions ▾';
-  actionsBtn.addEventListener('click', (e)=>{
+  actionsBtn.addEventListener('click', (e) => {
     e.stopPropagation();
     openSlotActionMenu(actionsBtn);
   });
-  // Insert before popup if exists
-  const popup = document.getElementById(`${day}-${meal}-popup`);
-  if(popup) cell.insertBefore(actionsBtn, popup); else cell.appendChild(actionsBtn);
+  cell.appendChild(actionsBtn);
 }
+
+
 
 function openSlotActionMenu(btn){
   closeAllSlotMenus();
@@ -252,15 +251,27 @@ function openSlotActionMenu(btn){
     }
     menu.appendChild(div);
   });
-  // Positioning
+  // Positioning: attach inside the same table cell instead of at body level
+const cell = btn.closest('td');
+if (cell) {
+  cell.style.position = 'relative';
+  menu.style.position = 'absolute';
+  menu.style.top = (btn.offsetTop + btn.offsetHeight + 4) + 'px';
+  menu.style.left = btn.offsetLeft + 'px';
+  cell.appendChild(menu);
+} else {
+  // fallback if not in table cell
   const rect = btn.getBoundingClientRect();
   menu.style.top = (window.scrollY + rect.bottom + 4) + 'px';
   menu.style.left = (window.scrollX + rect.left) + 'px';
   document.body.appendChild(menu);
-  setTimeout(()=>{
-    document.addEventListener('click', slotMenuOutside, { once: true });
-    document.addEventListener('keydown', slotMenuEsc, { once: true });
-  },0);
+}
+
+setTimeout(() => {
+  document.addEventListener('click', slotMenuOutside, { once: true });
+  document.addEventListener('keydown', slotMenuEsc, { once: true });
+}, 0);
+
 }
 function closeAllSlotMenus(){
   document.querySelectorAll('.slot-action-menu').forEach(m => m.remove());
@@ -376,6 +387,7 @@ function updateTable(data) {
   }
 }
 
+
 // ---------- init ----------
 const defaultMonday = populateWeekList();
 if (defaultMonday) {
@@ -432,46 +444,48 @@ async function refreshShoppingListBadge(weekOverride){
 }
 
 // ---------- Intercept meal update forms to submit via fetch + refresh ----------
+// ---------- Intercept meal update forms to submit via fetch + refresh ----------
 function hookMealForms(){
   document.querySelectorAll('form.recipe-modal').forEach(form => {
     if(form.dataset.hooked === '1') return;
     form.dataset.hooked = '1';
+
     form.addEventListener('submit', async (ev) => {
       ev.preventDefault();
       const fd = new FormData(form);
-      // Build payload for JSON endpoint when multipart not present; here we use normal POST -> fallback redirect
+
       try {
         const resp = await fetch('/update_meal', { method:'POST', body: fd });
-        // Server issues redirect (303) -> avoid full page reload; re-fetch only tbody and badge
-        // Rebuild only the current week (week/year from form)
+
         const week = fd.get('week');
         const year = fd.get('year');
+
         if(week && year){
-          // re-fetch real plan (not based on optimistic UI) using stored Monday
           const monday = window.CURRENT_MONDAY_YMD;
           if(monday){
-             try {
-               const r2 = await fetch(`/get_week?start=${encodeURIComponent(monday)}`, {cache:'no-store'});
-               if(r2.ok){
-                 const json = await r2.json();
-                 updateTable(json);
-                 // After plan was rebuilt, force a refresh on the nutrition panel (real-time)
-                 if(typeof window.refreshNutritionPanel === 'function'){
-                   window.refreshNutritionPanel();
-                 }
-               }
-             } catch(e){ console.warn('Failed refresh after save', e); }
+            try {
+              const r2 = await fetch(`/get_week?start=${encodeURIComponent(monday)}`, {cache:'no-store'});
+              if(r2.ok){
+                const json = await r2.json();
+                updateTable(json);
+                if(typeof window.refreshNutritionPanel === 'function'){
+                  window.refreshNutritionPanel();
+                }
+              }
+            } catch(e){ console.warn('Failed refresh after save', e); }
           }
           await refreshShoppingListBadge(week);
-      }
+        }
       } catch(err){
         console.error('Update meal failed', err);
       }
-      // Close the modal
+
+      // Close modal
       const day = fd.get('day');
       const meal = fd.get('meal');
       if(day && meal){ closeModal(day, meal); }
-      // Optimistically update the local slot UI
+
+      // Optimistic UI update
       const recipe = fd.get('recipe');
       if(day && meal && recipe){
         const slot = document.getElementById(`slot-${day}-${meal}`);
@@ -482,11 +496,14 @@ function hookMealForms(){
             slot.innerHTML = `<a href="${href}" style="color:#2c3e50;font-weight:600;text-decoration:none;">${recipe}</a>`;
           }
         }
-        // After optimistic slot update, update that day's kcal cell quickly
+
+        // 🔧 FIX: Rebuild buttons so "Add" disappears immediately
+        adjustMealButtons(day, meal, recipe, fd.get('date') || '');
+
+        // Quick kcal update
         try {
           const dayRowKcal = document.getElementById(`${day}-kcal`);
           if(dayRowKcal && window.RECIPES_KCAL){
-            // Re-sum this specific day only
             const rowDayMeals = {};
             ['breakfast','lunch','dinner'].forEach(m=>{
               const sp = document.getElementById(`slot-${day}-${m}`);
@@ -495,7 +512,11 @@ function hookMealForms(){
                 rowDayMeals[m] = link ? decodeURIComponent(link.getAttribute('href').split('/recipe/')[1]) : '-';
               }
             });
-            let s=0; ['breakfast','lunch','dinner'].forEach(m=>{ const nm=rowDayMeals[m]; if(nm && nm!=='-' && window.RECIPES_KCAL[nm]) s+= window.RECIPES_KCAL[nm]; });
+            let s=0;
+            ['breakfast','lunch','dinner'].forEach(m=>{
+              const nm=rowDayMeals[m];
+              if(nm && nm!=='-' && window.RECIPES_KCAL[nm]) s+= window.RECIPES_KCAL[nm];
+            });
             dayRowKcal.textContent = s;
           }
         } catch(e){ /* ignore */ }
@@ -503,6 +524,7 @@ function hookMealForms(){
     });
   });
 }
+
 
 // ---------- Delete meal (set slot to '-') ----------
 async function deleteMeal(day, meal){

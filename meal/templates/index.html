@@ -3,28 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <title>Meal Planner</title>
-    <link rel="stylesheet" href="/static/style.css?ts={{ time }}">
-    <link rel="stylesheet" href="/static/index.css?ts={{ time }}">
     <link rel="icon" type="image/png" href="/static/icons/logo.png">
+    <link rel="stylesheet" href="/static/cleanup_index.css?ts={{ time }}">
+    <style>
+ button.locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== POPUP MODERN V4 ===== */
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 18px;
+  width: 880px;
+  max-width: 95%;
+  max-height: 90vh;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+}
+
+.recipe-modal-content {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  height: 100%;
+  overflow: hidden;
+}
+/* RIGHT SIDE — RECIPE LIST */
+.recipe-modal-right {
+  padding: 25px 30px 90px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.recipe-modal-right h3 {
+  text-align: center;
+  margin-bottom: 10px;
+  color: #2e7d32;
+  font-size: 1.3rem;
+}
+
+.recipes-scroll {
+  flex: 1;
+  overflow-y: auto;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 8px;
+  background: #f9f9f9;
+  max-height: 330px;
+}
+
+.recipe-option {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #fff;
+  margin: 6px 0;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  text-align: center;
+  border: 2px solid transparent;
+  font-size: 1rem;
+}
+
+.recipe-option:hover {
+  border-color: #ff9800;
+  color: #ff9800;
+  background: #fffef8;
+  transform: scale(1.02);
+}
+
+.recipe-option.active,
+.recipe-option.selected {
+  background: #ff9800;
+  color: #fff;
+  font-weight: 600;
+  border-color: #ff9800;
+}
+
+/* SAVE BUTTON — ORANGE */
+.save-btn {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+  color: #fff;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 30px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 1rem;
+  position: absolute;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 4px 15px rgba(245, 124, 0, 0.35);
+  transition: all 0.3s ease;
+}
+
+.save-btn:hover {
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 6px 18px rgba(245, 124, 0, 0.45);
+}
+
+/* === ACTIONS MENU (Dropdown fix FINAL) === */
+.actions-container {
+  position: relative;
+  display: inline-block;
+}
+
+.slot-actions-btn {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.slot-actions-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 124, 0, 0.35);
+}
+
+/* Meniul dropdown */
+.actions-menu {
+  position: fixed; /* FIX CHEIE! — iese din overflow-ul tabelului */
+  background: #fff;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  display: none;
+  flex-direction: column;
+  min-width: 150px;
+  padding: 6px 0;
+  animation: fadeIn 0.15s ease;
+}
+
+.actions-menu.show {
+  display: flex;
+}
+
+.action-item {
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.action-item:hover {
+  background: #f5f5f5;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+        body.bg {
+  overflow: hidden;
+  height: 100vh;
+}
+        /* === Flash Notice — bottom-left corner === */
+.flash-banner {
+  position: fixed;
+  bottom: 25px;
+  left: 25px;
+  background: linear-gradient(135deg, #ffa726, #fb8c00);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  font-weight: 600;
+  z-index: 9999;
+  font-size: 0.9rem;
+  animation: fadeOut 4s ease forwards;
+}
+
+/* Optional: fade out effect */
+@keyframes fadeOut {
+  0% { opacity: 1; transform: translateY(0); }
+  80% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(10px); }
+}
+    </style>
 </head>
 <body class="bg" data-week="{{ plan.week }}" data-year="{{ plan.year }}">
 <header>
     <div class="header-row">
-        <h1>Meal Planner</h1>
+        <h1>M.P.M. Meal Planner</h1>
         <div class="rec-info-banner" title="Nearest expiry recommendation">
-            Recommendation: Use and consume the foods with the nearest expiration date first when cooking and eating
+            💡 Use foods with nearest expiration date first!
         </div>
     </div>
     <div id="recipes-json" data-recipes='{{ recipes | tojson | replace("'","&#39;") }}' style="display:none;"></div>
 </header>
+
 {% if notice_message %}
 <div class="flash-banner" id="flashNotice">{{ notice_message }}</div>
-<style>
-.flash-banner{position:fixed;top:8px;left:50%;transform:translateX(-50%);background:#1976d2;color:#fff;padding:10px 18px;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.25);font-size:.85rem;z-index:3000;animation:flashIn .35s ease;}
-@keyframes flashIn{from{opacity:0;transform:translate(-50%,-10px);}to{opacity:1;transform:translate(-50%,0);}}
-.flash-banner.hide{opacity:0;transition:opacity .4s ease;}
-</style>
-<script>setTimeout(()=>{const el=document.getElementById('flashNotice');if(el){el.classList.add('hide');setTimeout(()=>el.remove(),600);}},4000);</script>
 {% endif %}
 
 {% set exp_count = expiring_soon|length if expiring_soon else 0 %}
@@ -32,9 +214,9 @@
 {% set total_alerts = exp_count + low_count %}
 
 {% if total_alerts > 0 %}
-<div class="alerts-entry" id="alertsEntryBar" style="position:absolute; top:10px; right:30px; z-index:1800;">
+<div class="alerts-entry" id="alertsEntryBar">
     <button id="alertsMainBtn" class="alerts-toggle-btn" data-total="{{ total_alerts }}">
-        Show alerts
+         Show alerts ({{ total_alerts }})
     </button>
 </div>
 
@@ -112,7 +294,7 @@
 {% endif %}
 
 {% if nutrition %}
-<div class="stats-entry" id="statsEntryBar" style="position:absolute; top:10px; right:220px; z-index:1800;">
+<div class="stats-entry" id="statsEntryBar">
     <button id="statsMainBtn" class="stats-toggle-btn">Show stats</button>
 </div>
 <div id="statsPanel" class="stats-panel" aria-hidden="true" data-week="{{ plan.week }}" data-year="{{ plan.year }}">
@@ -168,40 +350,31 @@
 </div>
 {% endif %}
 
-<div class="overlay center-buttons">
+<div class="overlay">
     <div class="main-btns-row">
         <a href="/recipes-page"><button class="main-btn">See all recipes</button></a>
         <a href="/pantry"><button class="main-btn">My Pantry</button></a>
         <a id="shoppingListLink" href="/shopping-list?week={{ plan.week }}"><button id="shoppingListBtn" class="main-btn">Shopping List <span id="shoppingListCount" class="badge" style="display:none;">0</span></button></a>
     </div>
 
-    <!-- Weekly Meal Schedule Table -->
     <div class="pantry-table" style="margin-top: 40px; max-width: none; width: 95%;">
-        <h2 style="text-align: center; margin-bottom: 20px; color: #333; font-size: 1.5em;">Weekly Meal Schedule</h2>
+        <h2>Weekly Meal Schedule</h2>
 
-        <div style="display:flex; justify-content:center; align-items:center; margin-bottom:20px; gap:15px; flex-wrap:wrap;">
-
-            <!-- Navigare săptămână -->
+        <div class="week-controls">
             <div style="display:flex; gap:10px;">
                 <button id="todayWeek" class="main-btn small">Today</button>
             </div>
 
-            <!-- Dropdown săptămână (centrul) -->
             <div style="position: relative;">
-                <button id="weekDropdownBtn" onclick="toggleWeekDropdown()" class="main-btn small"
-                        style="background:#FF9800; font-size:.9em; padding:8px 16px; min-width:250px;">
+                <button id="weekDropdownBtn" onclick="toggleWeekDropdown()" class="main-btn small">
                     <span id="weekDisplay"></span> ▼
                 </button>
-                <div id="weekDropdown"
-                     style="display:none; position:absolute; top:100%; left:0; right:0; background:#fff;
-                            border:1px solid #ddd; border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,.15);
-                            z-index:1000; max-height:300px; overflow-y:auto;">
+                <div id="weekDropdown">
                     <div id="weekList"></div>
                 </div>
             </div>
 
-            <!-- Acțiuni suplimentare -->
-            <div style="display:flex; gap:10px;">
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
                 <button id="resetWeek" class="main-btn small">Reset week</button>
                 <button id="randomizeWeek" class="main-btn small">Randomize</button>
                 <button id="availableRecipes" class="main-btn small">Available</button>
@@ -209,15 +382,14 @@
             </div>
         </div>
 
-
-        <table id="mealTable" style="width:100%; border-collapse:collapse; text-align:center;">
+        <table id="mealTable">
             <thead>
             <tr>
-                <th style="color:#008000; text-align:center;">Day</th>
-                <th style="color:#008000; text-align:center;">Breakfast</th>
-                <th style="color:#008000; text-align:center;">Lunch</th>
-                <th style="color:#008000; text-align:center;">Dinner</th>
-                <th style="color:#008000;text-align: center;">Calories per day</th>
+                <th>Day</th>
+                <th>Breakfast</th>
+                <th>Lunch</th>
+                <th>Dinner</th>
+                <th>Calories per day</th>
             </tr>
             </thead>
             <tbody id="mealTbody">
@@ -229,59 +401,79 @@
         <span id="slot-{{day}}-{{meal}}">
         {% if meals[meal] == '-' %}-
         {% elif meals[meal] is mapping and meals[meal].get('cooked') %}
-            <span style="color:green; font-weight:bold;">{{ meals[meal].name }} (Cooked)</span>
+            <span style="color:#4caf50; font-weight:bold;">✓ {{ meals[meal].name }} (Cooked)</span>
         {% else %}
-            <a href="/recipe/{{ meals[meal] | urlencode }}" style="color:#2c3e50; font-weight:600; text-decoration:none;">{{ meals[meal] }}</a>
+            <a href="/recipe/{{ meals[meal] | urlencode }}">{{ meals[meal] }}</a>
         {% endif %}
         </span>
 
-        {# Add button for empty slot #}
         {% if meals[meal] == '-' %}
-            <button type="button" class="add-btn" onclick="openModal('{{ day }}','{{ meal }}')">Add</button>
-        {% elif not (meals[meal] is mapping and meals[meal].get('cooked')) %}
-            <button type="button" class="slot-actions-btn" data-day="{{day}}" data-meal="{{meal}}" data-date="{{ meals.date }}">Actions ▾</button>
-        {% endif %}
+    <button type="button" class="add-btn" onclick="openModal('{{ day }}','{{ meal }}')">Add</button>
+{% elif meals[meal] is mapping and not meals[meal].get('cooked') %}
+    <div class="actions-container">
+        <button type="button" class="slot-actions-btn" data-day="{{day}}" data-meal="{{meal}}" data-date="{{ meals.date }}">Actions ▾</button>
+        <div class="actions-menu">
+            <div class="action-item" onclick="editMeal('{{ day }}','{{ meal }}')">Edit</div>
+            <div class="action-item" onclick="cookMeal('{{ day }}','{{ meal }}')">Cook</div>
+            <div class="action-item" onclick="deleteMeal('{{ day }}','{{ meal }}')">Delete</div>
+        </div>
+    </div>
+{% endif %}
+
+
+
 
         <div id="{{day}}-{{meal}}-popup" class="popup" style="display:none;">
             <div class="popup-content">
-                <span class="close" onclick="closeModal('{{day}}','{{meal}}')">&times;</span>
-                <form method="post" action="/update_meal" class="recipe-modal">
-                    <input type="hidden" name="day" value="{{day}}">
-                    <input type="hidden" name="meal" value="{{meal}}">
-                    <input type="hidden" name="week" value="{{ plan.week }}">
-                    <input type="hidden" name="year" value="{{ plan.year }}">
-                    <div class="recipe-modal-content">
-                        <div class="recipe-modal-left">
-                            {% set current_recipe_name = meals[meal] if meals[meal] != '-' else '' %}
-                            {% set current_recipe = recipes | selectattr('name','equalto', current_recipe_name) | first %}
-                            {% if current_recipe and current_recipe.image %}
-                                <img id="recipePreview-{{day}}-{{meal}}" src="/static/pictures/{{ current_recipe.image }}" alt="{{ current_recipe.name }}">
-                            {% else %}
-                                <div id="recipePreview-{{day}}-{{meal}}" class="no-image-placeholder">
-                                    <img src="/static/icons/logo.png" alt="No recipe" style="max-width:100%; max-height:100%; object-fit:contain; opacity:0.6;" />
-                                </div>
-                            {% endif %}
-                            <div class="kcal-line" id="kcal-{{day}}-{{meal}}">
-                                {% if current_recipe and current_recipe.calories_per_serving %}
-                                  Calories/serving: <strong>{{ current_recipe.calories_per_serving }}</strong>
-                                {% else %}
-                                  <span class="muted">Calories/serving: —</span>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="recipe-modal-right">
-                            <h3>Select recipe for {{ day }} - {{ meal }}</h3>
-                            <div class="recipes-scroll">
-                                {% for r in recipes %}
-                                    <div class="recipe-option" onclick="selectRecipe('{{ r.name }}','{{ r.image }}','{{day}}','{{meal}}')">{{ r.name }}</div>
-                                {% endfor %}
-                            </div>
-                            <input type="hidden" name="recipe" id="selectedRecipe-{{day}}-{{meal}}" value="{{ current_recipe.name if current_recipe else '' }}">
-                            <button type="submit" class="save-btn">Save</button>
-                        </div>
+              <span class="close" onclick="closeModal('{{day}}','{{meal}}')">&times;</span>
+              <form method="post" action="/update_meal" class="recipe-modal">
+                <input type="hidden" name="day" value="{{day}}">
+                <input type="hidden" name="meal" value="{{meal}}">
+                <input type="hidden" name="week" value="{{ plan.week }}">
+                <input type="hidden" name="year" value="{{ plan.year }}">
+                <div class="recipe-modal-content">
+                  <!-- LEFT: IMAGE -->
+                  <div class="recipe-modal-left">
+                    {% set current_recipe_name = meals[meal] if meals[meal] != '-' else '' %}
+                    {% set current_recipe = recipes | selectattr('name','equalto', current_recipe_name) | first %}
+                    {% if current_recipe and current_recipe.image %}
+                      <img id="recipePreview-{{day}}-{{meal}}"
+                           src="/static/pictures/{{ current_recipe.image }}"
+                           alt="{{ current_recipe.name }}"
+                           class="recipe-preview-large">
+                    {% else %}
+                      <div class="no-image-placeholder">
+                        <img src="/static/icons/logo.png" alt="No recipe" />
+                      </div>
+                    {% endif %}
+                    <div class="kcal-line" id="kcal-{{day}}-{{meal}}">
+                      {% if current_recipe and current_recipe.calories_per_serving %}
+                        <span><strong>{{ current_recipe.calories_per_serving }}</strong> kcal / serving</span>
+                      {% else %}
+                        <span class="muted">Calories/serving: —</span>
+                      {% endif %}
                     </div>
-                </form>
+                  </div>
+
+                  <!-- RIGHT: RECIPE LIST -->
+                  <div class="recipe-modal-right">
+                    <h3>Select recipe for <span>{{ day }}</span> – <span>{{ meal }}</span></h3>
+                    <div class="recipes-scroll">
+                      {% for r in recipes %}
+                      <div class="recipe-option"
+                           onclick="selectRecipe('{{ r.name }}','{{ r.image }}','{{day}}','{{meal}}')">
+                        {{ r.name }}
+                      </div>
+                      {% endfor %}
+                    </div>
+                    <input type="hidden" name="recipe" id="selectedRecipe-{{day}}-{{meal}}"
+                           value="{{ current_recipe.name if current_recipe else '' }}">
+                    <button type="submit" class="save-btn">Save Recipe</button>
+                  </div>
+                </div>
+              </form>
             </div>
+
         </div>
     </td>
 {% endfor %}
@@ -291,7 +483,6 @@
                   {% set rb = (recipes | selectattr('name','equalto', bname) | first) if bname and bname != '-' else None %}
                   {% set rl = (recipes | selectattr('name','equalto', lname) | first) if lname and lname != '-' else None %}
                   {% set rd = (recipes | selectattr('name','equalto', dname) | first) if dname and dname != '-' else None %}
-                  {# Normalize calories field (#184) - prefer calories_per_serving but allow legacy kalories_per_serving #}
                   {% set rb_cal = rb.calories_per_serving if rb and rb.calories_per_serving is not none else (rb.kalories_per_serving if rb and rb.kalories_per_serving is not none else 0) %}
                   {% set rl_cal = rl.calories_per_serving if rl and rl.calories_per_serving is not none else (rl.kalories_per_serving if rl and rl.kalories_per_serving is not none else 0) %}
                   {% set rd_cal = rd.calories_per_serving if rd and rd.calories_per_serving is not none else (rd.kalories_per_serving if rd and rd.kalories_per_serving is not none else 0) %}
@@ -304,344 +495,76 @@
     </div>
 </div>
 
-<!-- Available Recipes Modal -->
 <div id="availableModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:4100; align-items:center; justify-content:center;">
-  <div style="background:#fff; padding:20px 22px 18px 22px; border-radius:12px; width:520px; max-width:95%; font-size:.8rem; box-shadow:0 10px 28px rgba(0,0,0,.35); max-height:80%; display:flex; flex-direction:column;">
-     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <h3 style="margin:0; font-size:1rem;">Rețete posibile (disponibile)</h3>
-        <button id="availableClose" style="background:transparent; border:none; font-size:1.2rem; cursor:pointer;">&times;</button>
+  <div style="background:#fff; padding:20px 22px 18px 22px; border-radius:20px; width:520px; max-width:95%; font-size:.8rem; box-shadow:0 10px 28px rgba(0,0,0,.35); max-height:80%; display:flex; flex-direction:column;">
+     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <h3 style="margin:0; font-size:1.2rem; color:var(--primary-green);">Available Recipes</h3>
+        <button id="availableClose" style="background:transparent; border:none; font-size:1.5rem; cursor:pointer; color:var(--text-light);">&times;</button>
      </div>
-     <div id="availableLoading" style="font-size:.65rem; color:#555; display:none;">Se încarcă...</div>
-     <div id="availableError" style="font-size:.65rem; color:#c62828; display:none;">Eroare la încărcare.</div>
+     <div id="availableLoading" style="font-size:.65rem; color:#555; display:none;">Loading...</div>
+     <div id="availableError" style="font-size:.65rem; color:#c62828; display:none;">Error loading.</div>
      <div style="overflow:auto; flex:1;" id="availableContent">
         <table style="width:100%; border-collapse:collapse; font-size:.7rem;">
           <thead>
-            <tr style="background:#2e7d32; color:#fff;">
-              <th style="padding:6px 8px; text-align:left;">Nume</th>
-              <th style="padding:6px 8px; text-align:right;">Servings</th>
-              <th style="padding:6px 8px; text-align:right;">Cal/serv</th>
-              <th style="padding:6px 8px; text-align:right;">De câte ori</th>
+            <tr style="background:var(--primary-green); color:#fff;">
+              <th style="padding:8px 10px; text-align:left; border-radius:8px 0 0 0;">Name</th>
+              <th style="padding:8px 10px; text-align:right;">Servings</th>
+              <th style="padding:8px 10px; text-align:right;">Cal/serv</th>
+              <th style="padding:8px 10px; text-align:right; border-radius:0 8px 0 0;">Times</th>
             </tr>
           </thead>
           <tbody id="availableTbody"></tbody>
         </table>
      </div>
-     <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; font-size:.6rem;">
-        <span id="availableSummary" style="opacity:.75;">&nbsp;</span>
-        <button id="availableCloseFooter" style="background:#777; color:#fff; border:none; padding:6px 14px; border-radius:6px; cursor:pointer; font-size:.65rem;">Închide</button>
+     <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px; font-size:.65rem;">
+        <span id="availableSummary" style="opacity:.75; color:var(--text-light);">&nbsp;</span>
+        <button id="availableCloseFooter" class="mini-hide-btn">Close</button>
      </div>
   </div>
 </div>
 
-<!-- Advanced Randomize Modal -->
 <div id="advRandModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:4000; align-items:center; justify-content:center;">
-  <div style="background:#fff; padding:20px 22px 18px 22px; border-radius:12px; width:420px; max-width:95%; font-size:.8rem; box-shadow:0 10px 28px rgba(0,0,0,.35);">
-     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <h3 style="margin:0; font-size:1rem;">Randomize</h3>
-        <button id="advRandClose" style="background:transparent; border:none; font-size:1.2rem; cursor:pointer;">&times;</button>
+  <div style="background:#fff; padding:25px; border-radius:20px; width:450px; max-width:95%; font-size:.85rem; box-shadow:0 10px 28px rgba(0,0,0,.35);">
+     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+        <h3 style="margin:0; font-size:1.3rem; color:var(--primary-green);">Advanced Randomize</h3>
+        <button id="advRandClose" style="background:transparent; border:none; font-size:1.5rem; cursor:pointer; color:var(--text-light);">&times;</button>
      </div>
      <form id="advRandForm">
-       <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-bottom:12px;">
+       <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-bottom:15px;">
          {% for d in ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'] %}
-         <label style="display:flex; gap:4px; align-items:center; background:#f5f5f5; padding:6px 8px; border-radius:6px;">
-           <input type="checkbox" name="day" value="{{ d }}" class="ar-day"> <span>{{ d }}</span>
+         <label style="display:flex; gap:6px; align-items:center; background:var(--light-gray); padding:10px 12px; border-radius:10px; cursor:pointer; transition:all 0.2s ease;">
+           <input type="checkbox" name="day" value="{{ d }}" class="ar-day" style="transform:scale(1.2);"> <span style="font-weight:500;">{{ d }}</span>
          </label>
          {% endfor %}
        </div>
-       <div style="margin-bottom:10px;">
-         <label style="display:flex; align-items:center; gap:6px;">
-           <input type="checkbox" id="arReplaceExisting"> <span>Also replaces already set (non-cooked) recipes</span>
+       <div style="margin-bottom:12px;">
+         <label style="display:flex; align-items:center; gap:8px; background:var(--light-gray); padding:10px 12px; border-radius:10px; cursor:pointer;">
+           <input type="checkbox" id="arReplaceExisting" style="transform:scale(1.2);"> <span>Also replace already set (non-cooked) recipes</span>
          </label>
        </div>
-       <div style="margin-bottom:10px;">
-         <label style="display:flex; align-items:center; gap:6px;">
-           <input type="checkbox" id="arOnlyAvailable"> <span>Doar rețete disponibile (am toate ingredientele)</span>
+       <div style="margin-bottom:15px;">
+         <label style="display:flex; align-items:center; gap:8px; background:var(--light-gray); padding:10px 12px; border-radius:10px; cursor:pointer;">
+           <input type="checkbox" id="arOnlyAvailable" style="transform:scale(1.2);"> <span>Only available recipes (all ingredients)</span>
          </label>
        </div>
-       <div style="font-size:.65rem; line-height:1.3; background:#fff8e1; padding:8px 10px; border:1px solid #ffe082; border-radius:6px; margin-bottom:12px;">
-         <strong>Reguli:</strong><br>
-         - Zilele din trecut și sloturile gătite nu sunt modificate.<br>
-         - Dacă nu selectezi nicio zi, se consideră toate zilele viitoare.<br>
-         - Bifează opțiunea pentru a re-randomiza și sloturile deja populate.
+       <div style="font-size:.7rem; line-height:1.5; background:#fff8e1; padding:12px; border:2px solid var(--primary-orange); border-radius:10px; margin-bottom:15px;">
+         <strong style="color:var(--dark-orange);">Rules:</strong><br>
+         • Past days and cooked slots are not modified<br>
+         • If no days selected, all future days are considered<br>
+         • Check option to re-randomize already populated slots
        </div>
-       <div style="display:flex; justify-content:flex-end; gap:10px;">
-         <button type="button" id="advRandCancel" style="background:#777; color:#fff; border:none; padding:8px 14px; border-radius:6px; cursor:pointer;">Cancel</button>
-         <button type="submit" style="background:#6a1b9a; color:#fff; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600;">Run</button>
+       <div style="display:flex; justify-content:flex-end; gap:12px;">
+         <button type="button" id="advRandCancel" class="cancel-btn">Cancel</button>
+         <button type="submit" style="background:linear-gradient(135deg, var(--primary-green), var(--dark-green)); color:#fff; border:none; padding:10px 24px; border-radius:25px; cursor:pointer; font-weight:700; box-shadow:0 4px 15px rgba(46,125,50,0.3); transition:all 0.3s ease;">Run</button>
        </div>
      </form>
   </div>
 </div>
 
-<script src="/static/script.js?ts={{ time }}"></script>
-<script src="/static/week_controls.js?ts={{ time }}"></script>
-
-<style>
-    html, body { height:100%; margin:0; overflow:hidden; }
-    .badge { background:#e91e63; color:#fff; padding:2px 8px; border-radius:12px; font-size:0.75em; margin-left:6px; vertical-align:middle; }
-    /* Unified alerts styles */
-    .alerts-toggle-btn { background:#2c3e50; color:#fff; border:none; padding:8px 16px; border-radius:24px; cursor:pointer; font-size:0.85rem; box-shadow:0 4px 12px rgba(0,0,0,0.25); }
-    .alerts-toggle-btn:hover { background:#1d2833; }
-    .alerts-panel { position:fixed; top:60px; right:0; width:370px; max-width:90%; background:rgba(255,255,255,0.97); backdrop-filter:blur(4px); box-shadow:-6px 0 18px -4px rgba(0,0,0,0.35); border-left:1px solid #ddd; border-top-left-radius:14px; border-bottom-left-radius:14px; z-index:2200; transform:translateX(110%); transition:transform .35s ease; display:flex; flex-direction:column; max-height:calc(100% - 80px); }
-    .alerts-panel.open { transform:translateX(0); }
-    .alerts-header { display:flex; justify-content:space-between; align-items:center; padding:10px 14px 6px 18px; border-bottom:1px solid #eee; }
-    .alerts-header .total-badge { background:#ff9800; color:#fff; font-size:0.65rem; padding:4px 7px; border-radius:12px; margin-left:6px; }
-    .alerts-tabs { display:flex; gap:6px; padding:8px 12px 4px 12px; flex-wrap:wrap; }
-    .alerts-tab { background:#f1f1f1; border:none; padding:6px 12px; border-radius:18px; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.5px; cursor:pointer; display:flex; align-items:center; gap:6px; }
-    .alerts-tab.active { background:#ff9800; color:#fff; }
-    .alerts-tab .tab-badge { background:rgba(0,0,0,0.2); color:#fff; padding:2px 6px; border-radius:10px; font-size:0.6rem; }
-    .alerts-tab.active .tab-badge { background:rgba(255,255,255,0.25); }
-    .alerts-content { padding:4px 12px 10px 12px; overflow:visible; }
-    .alerts-table-wrapper { position:relative; overflow-y:auto; max-height:220px; /* fallback if JS not running */ }
-    .alerts-table-wrapper::-webkit-scrollbar { width:6px; }
-    .alerts-table-wrapper::-webkit-scrollbar-thumb { background:#bbb; border-radius:4px; }
-    .alerts-table-wrapper::-webkit-scrollbar-thumb:hover { background:#999; }
-    .alerts-content table { width:100%; border-collapse:collapse; font-size:0.75rem; }
-    .alerts-content th { text-align:left; background:#ff9800; color:#fff; padding:6px 8px; font-weight:600; position:sticky; top:0; }
-    .alerts-content td { padding:4px 8px; border-bottom:1px solid #eee; }
-    .alerts-list { animation: fadeIn .25s ease; }
-    @keyframes fadeIn { from { opacity:0; transform:translateY(4px);} to { opacity:1; transform:translateY(0);} }
-    .hide-all-btn { background:transparent; border:none; font-size:1.2rem; line-height:1; cursor:pointer; color:#555; padding:2px 6px; border-radius:6px; }
-    .hide-all-btn:hover { background:#eee; }
-    .mini-hide-btn { background:#2c3e50; color:#fff; border:none; padding:6px 14px; border-radius:18px; cursor:pointer; font-size:0.65rem; }
-    .mini-hide-btn:hover { background:#18222b; }
-    .alerts-footer { padding:6px 12px 12px 12px; border-top:1px solid #eee; text-align:right; }
-    .sev-expired { background:#ffebee; }
-    .sev-0 { background:#ffe0b2; }
-    .sev-1 { background:#fff3cd; }
-    .sev-23 { background:#f1f8e9; }
-    .alerts-content::-webkit-scrollbar { width:8px; }
-    .alerts-content::-webkit-scrollbar-track { background:transparent; }
-    .alerts-content::-webkit-scrollbar-thumb { background:#ccc; border-radius:4px; }
-    .alerts-content::-webkit-scrollbar-thumb:hover { background:#bbb; }
-
-    /* Stats panel styles */
-    .stats-toggle-btn { background:#4a148c; color:#fff; border:none; padding:8px 16px; border-radius:24px; cursor:pointer; font-size:0.85rem; box-shadow:0 4px 12px rgba(0,0,0,0.25); }
-    .stats-toggle-btn:hover { background:#31115c; }
-    .stats-panel { position:fixed; top:110px; right:0; width:360px; max-width:90%; background:rgba(255,255,255,0.97); backdrop-filter:blur(4px); box-shadow:-6px 0 18px -4px rgba(0,0,0,0.35); border-left:1px solid #ddd; border-top-left-radius:14px; border-bottom-left-radius:14px; z-index:2190; transform:translateX(110%); transition:transform .35s ease; display:flex; flex-direction:column; max-height:calc(100% - 140px); }
-    .stats-panel.open { transform:translateX(0); }
-    .stats-header { display:flex; justify-content:space-between; align-items:center; padding:10px 14px 6px 18px; border-bottom:1px solid #eee; }
-    .stats-week-badge { background:#4a148c; color:#fff; padding:4px 8px; border-radius:10px; font-size:0.6rem; margin-left:4px; }
-    .stats-tabs { display:flex; gap:6px; padding:8px 12px 4px 12px; }
-    .stats-tab { background:#ede7f6; border:none; padding:6px 14px; border-radius:18px; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.5px; cursor:pointer; }
-    .stats-tab.active { background:#7b1fa2; color:#fff; }
-    .stats-content { padding:6px 14px 10px 14px; overflow-y:auto; }
-    .stats-week-grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(120px,1fr)); gap:12px; }
-    .stats-week-grid .metric { background:#f8f5fc; border:1px solid #e0d7ef; padding:8px 10px; border-radius:10px; font-size:0.75rem; display:flex; flex-direction:column; gap:4px; }
-    .stats-week-grid .metric strong { font-size:1rem; color:#4a148c; }
-    .stats-table { width:100%; border-collapse:collapse; font-size:0.72rem; }
-    .stats-table th { background:#7b1fa2; color:#fff; padding:6px 8px; position:sticky; top:0; }
-    .stats-table td { padding:4px 8px; border-bottom:1px solid #eee; text-align:right; }
-    .stats-table td:first-child, .stats-table th:first-child { text-align:left; }
-    .stats-footer { padding:6px 12px 10px 12px; border-top:1px solid #eee; text-align:right; }
-    .stats-panel.refreshing #statsWeekLoading, .stats-panel.refreshing #statsDaysLoading { display:block; }
-    .del-btn { background:#c62828; color:#fff; border:none; padding:4px 10px; margin-top:4px; border-radius:4px; cursor:pointer; font-size:.65rem; display:inline-block; }
-    .del-btn:hover { background:#b71c1c; }
-
-    /* Cook Panel styles */
-    .cook-panel { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.55); z-index:3000; display:flex; align-items:center; justify-content:center; }
-    .cook-panel-content { background:#fff; width:520px; max-width:95%; border-radius:14px; box-shadow:0 10px 30px rgba(0,0,0,.35); display:flex; flex-direction:column; max-height:90%; }
-    .cook-panel-header { display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border-bottom:1px solid #eee; }
-    .cook-panel-body { padding:12px 18px 4px 18px; overflow-y:auto; }
-    .cook-panel-footer { padding:12px 18px 16px 18px; border-top:1px solid #eee; display:flex; justify-content:flex-end; gap:10px; }
-    .cook-ing-table { width:100%; border-collapse:collapse; font-size:0.8rem; }
-    .cook-ing-table th { background:#4caf50; color:#fff; padding:6px 8px; position:sticky; top:0; }
-    .cook-ing-table td { padding:6px 6px; border-bottom:1px solid #f0f0f0; }
-    .cook-ing-table tbody tr:hover { background:#f9fff6; }
-    .cook-ing-table input { width:70px; padding:4px 6px; font-size:0.75rem; }
-    .finish-btn { background:#4caf50; color:#fff; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; font-size:0.8rem; }
-    .finish-btn:hover { background:#449d48; }
-    .cancel-btn { background:#777; color:#fff; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; font-size:0.8rem; }
-    .cancel-btn:hover { background:#5a5a5a; }
-    .close-btn { background:transparent; border:none; font-size:1.4rem; line-height:1; cursor:pointer; color:#444; }
-    .close-btn:hover { color:#000; }
-    .cook-panel-msg { margin-top:10px; font-size:0.7rem; padding:6px 10px; border-radius:6px; background:#fff3cd; color:#8a6d3b; }
-    .cook-btn { margin-top:5px; background:#4caf50; color:#fff; border:none; padding:4px 10px; font-size:.65rem; border-radius:4px; cursor:pointer; }
-    .cook-btn:hover { background:#3f8f43; }
-
-    .slot-actions-btn { margin-top:4px; background:#607d8b; color:#fff; border:none; padding:4px 10px; font-size:.65rem; border-radius:4px; cursor:pointer; }
-    .slot-actions-btn:hover { background:#546d79; }
-    .add-btn { margin-top:4px; background:#2196f3; color:#fff; border:none; padding:4px 10px; font-size:.65rem; border-radius:4px; cursor:pointer; }
-    .add-btn:hover { background:#1976d2; }
-    .slot-action-menu { position:absolute; z-index:3500; background:#fff; border:1px solid #ddd; box-shadow:0 4px 14px rgba(0,0,0,.18); border-radius:6px; min-width:140px; font-size:.7rem; padding:4px 0; }
-    .slot-action-menu .item { padding:6px 10px; cursor:pointer; display:flex; align-items:center; gap:6px; }
-    .slot-action-menu .item:hover { background:#f5f5f5; }
-    .slot-action-menu .item.danger { color:#c62828; }
-    .slot-action-menu .item.disabled { opacity:.45; cursor:default; }
-
-    /* Minor tweaks for available recipes modal scrollbars */
-    #availableContent::-webkit-scrollbar { width:6px; }
-    #availableContent::-webkit-scrollbar-thumb { background:#bbb; border-radius:4px; }
-    #availableContent::-webkit-scrollbar-thumb:hover { background:#999; }
-
-    /* Cook Panel Modal */
-    #cookPanel {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: 10000;
-      justify-content: center;
-      align-items: center;
-    }
-    .cook-panel-content {
-      background: #fff;
-      width: 480px;
-      max-width: 90%;
-      border-radius: 12px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-      display: flex;
-      flex-direction: column;
-      max-height: 80%;
-      overflow-y: auto;
-    }
-    .cook-panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px;
-      border-bottom: 1px solid #eee;
-    }
-    .cook-panel-title {
-      margin: 0;
-      font-size: 1.1rem;
-      font-weight: 500;
-      color: #333;
-    }
-    .close-btn {
-      background: transparent;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: #666;
-    }
-    .close-btn:hover {
-      color: #333;
-    }
-    .cook-panel-body {
-      padding: 16px;
-      flex: 1;
-    }
-    .cook-panel-footer {
-      padding: 12px 16px;
-      border-top: 1px solid #eee;
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-    }
-    .finish-btn, .cancel-btn {
-      background: #4caf50;
-      color: #fff;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: background 0.3s;
-    }
-    .finish-btn:hover {
-      background: #388e3c;
-    }
-    .cancel-btn {
-      background: #f44336;
-    }
-    .cancel-btn:hover {
-      background: #d32f2f;
-    }
-    .cook-ingredients-wrapper {
-      max-height: 300px;
-      overflow-y: auto;
-      margin-top: 12px;
-    }
-    .cook-ing-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.85rem;
-    }
-    .cook-ing-table th {
-      background: #4caf50;
-      color: #fff;
-      padding: 8px 10px;
-      position: sticky;
-      top: 0;
-    }
-    .cook-ing-table td {
-      padding: 8px 10px;
-      border-bottom: 1px solid #f0f0f0;
-    }
-    .cook-ing-table tbody tr:hover {
-      background: #f9fff6;
-    }
-    .cook-ing-table input {
-      width: 70px;
-      padding: 4px 6px;
-      font-size: 0.75rem;
-    }
-    .finish-btn {
-      background: #4caf50;
-      color: #fff;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.8rem;
-    }
-    .finish-btn:hover {
-      background: #449d48;
-    }
-    .cancel-btn {
-      background: #777;
-      color: #fff;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.8rem;
-    }
-    .cancel-btn:hover {
-      background: #5a5a5a;
-    }
-    .close-btn {
-      background: transparent;
-      border: none;
-      font-size: 1.4rem;
-      line-height: 1;
-      cursor: pointer;
-      color: #444;
-    }
-    .close-btn:hover {
-      color: #000;
-    }
-    .cook-panel-msg {
-      margin-top: 10px;
-      font-size: 0.7rem;
-      padding: 6px 10px;
-      border-radius: 6px;
-      background: #fff3cd;
-      color: #8a6d3b;
-    }
-    .cook-btn {
-      margin-top: 5px;
-      background: #4caf50;
-      color: #fff;
-      border: none;
-      padding: 4px 10px;
-      font-size: .65rem;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    .cook-btn:hover {
-      background: #3f8f43;
-    }
-</style>
-
-<!-- Cook Panel Modal -->
 <div id="cookPanel" class="cook-panel" style="display:none;">
   <div class="cook-panel-content">
     <div class="cook-panel-header">
-      <h3 id="cookPanelTitle" style="margin:0; font-size:1.1rem;">Cook recipe</h3>
+      <h3 id="cookPanelTitle" style="margin:0; font-size:1.2rem;">👨‍🍳 Cook Recipe</h3>
       <button id="cookPanelClose" class="close-btn" aria-label="Close">&times;</button>
     </div>
     <div id="cookPanelBody" class="cook-panel-body">
@@ -654,282 +577,14 @@
       <div id="cookPanelMsg" class="cook-panel-msg" style="display:none;"></div>
     </div>
     <div class="cook-panel-footer">
-      <button id="cookPanelFinish" class="finish-btn">Finished</button>
+      <button id="cookPanelFinish" class="finish-btn">✓ Finished</button>
       <button id="cookPanelCancel" class="cancel-btn">Cancel</button>
     </div>
   </div>
 </div>
 
-
-<script>
-(function(){
-  const PANEL_KEY = 'alertsPanelHidden';
-  const TAB_KEY = 'alertsActiveTab';
-  const panel = document.getElementById('alertsPanel');
-  const btn = document.getElementById('alertsMainBtn');
-  if(!panel || !btn) return;
-
-  // Limit table height to 5 rows (header + up to 5 body rows) with scroll inside wrapper
-  function limitAlertTables(){
-    const wrappers = panel.querySelectorAll('.alerts-table-wrapper');
-    wrappers.forEach(w => {
-      const table = w.querySelector('table');
-      if(!table) return;
-      const headerRow = table.querySelector('thead tr');
-      const bodyRows = table.querySelectorAll('tbody tr');
-      if(!bodyRows.length || !headerRow) return;
-      w.style.maxHeight = '';
-      const headerH = headerRow.getBoundingClientRect().height || 30;
-      const firstH = bodyRows[0].getBoundingClientRect().height || 26;
-      const visible = Math.min(5, bodyRows.length);
-      const target = headerH + firstH * visible + 2;
-      w.style.maxHeight = target + 'px';
-      w.style.overflowY = (bodyRows.length > 5) ? 'auto' : 'hidden';
-    });
-  }
-
-  const total = btn.getAttribute('data-total');
-  function setButtonLabel(open){
-     if(open){
-       btn.innerHTML = 'Alerts (<span id="alertsTotalBadge">'+ total +'</span>)';
-     } else {
-       btn.textContent = 'Show alerts';
-     }
-  }
-
-  function openPanel(){
-    panel.classList.add('open');
-    panel.setAttribute('aria-hidden','false');
-    localStorage.setItem(PANEL_KEY,'0');
-    setButtonLabel(true);
-    setTimeout(limitAlertTables, 40);
-  }
-  function closePanel(){
-    panel.classList.remove('open');
-    panel.setAttribute('aria-hidden','true');
-    localStorage.setItem(PANEL_KEY,'1');
-    setButtonLabel(false);
-  }
-  function togglePanel(){
-    if(panel.classList.contains('open')) closePanel(); else openPanel();
-  }
-
-  btn.addEventListener('click', togglePanel);
-  const hideBtn = document.getElementById('hideAlertsBtn');
-  if(hideBtn) hideBtn.addEventListener('click', closePanel);
-  const hideBoth = document.getElementById('hideBothBtn');
-  if(hideBoth) hideBoth.addEventListener('click', closePanel);
-
-  const tabs = Array.from(panel.querySelectorAll('.alerts-tab'));
-  function activateTab(name){
-    tabs.forEach(t => t.classList.toggle('active', t.dataset.tab === name));
-    panel.querySelectorAll('.alerts-list').forEach(l => {
-      l.style.display = (l.getAttribute('data-content') === name) ? 'block' : 'none';
-    });
-    localStorage.setItem(TAB_KEY, name);
-    setTimeout(limitAlertTables, 20);
-  }
-  tabs.forEach(t => t.addEventListener('click', () => activateTab(t.dataset.tab)));
-
-  window.addEventListener('resize', () => limitAlertTables());
-  document.addEventListener('DOMContentLoaded', () => limitAlertTables());
-
-  const hidden = localStorage.getItem(PANEL_KEY) === '1';
-  if(!hidden){ setTimeout(openPanel, 40); } else { setButtonLabel(false); }
-  const savedTab = localStorage.getItem(TAB_KEY);
-  if(savedTab && tabs.some(t => t.dataset.tab === savedTab)) activateTab(savedTab); else if(tabs.length) activateTab(tabs[0].dataset.tab);
-})();
-</script>
-
-<script>
-(function(){
-  const PANEL_KEY='statsPanelHidden';
-  const TAB_KEY='statsPanelTab';
-  const panel=document.getElementById('statsPanel');
-  const btn=document.getElementById('statsMainBtn');
-  if(!panel||!btn) return;
-  const tabs=[...panel.querySelectorAll('.stats-tab')];
-  function setBtn(open){ btn.textContent = open? 'Stats' : 'Show stats'; }
-  function open(){ panel.classList.add('open'); panel.setAttribute('aria-hidden','false'); localStorage.setItem(PANEL_KEY,'0'); setBtn(true); }
-  function close(){ panel.classList.remove('open'); panel.setAttribute('aria-hidden','true'); localStorage.setItem(PANEL_KEY,'1'); setBtn(false); }
-  function toggle(){ panel.classList.contains('open')?close():open(); }
-  btn.addEventListener('click',toggle);
-  const hide=document.getElementById('hideStatsBtn'); if(hide) hide.addEventListener('click',close);
-  const hide2=document.getElementById('hideStatsFooterBtn'); if(hide2) hide2.addEventListener('click',close);
-  function activate(name){
-    tabs.forEach(t=>t.classList.toggle('active', t.dataset.tab===name));
-    panel.querySelectorAll('.stats-view').forEach(v=>{ v.style.display = (v.getAttribute('data-content')===name)?'block':'none'; });
-    localStorage.setItem(TAB_KEY,name);
-  }
-  tabs.forEach(t=>t.addEventListener('click',()=>activate(t.dataset.tab)));
-  const hidden= localStorage.getItem(PANEL_KEY)==='1';
-  const saved = localStorage.getItem(TAB_KEY);
-  if(!hidden) setTimeout(open,60); else setBtn(false);
-  if(saved && tabs.some(t=>t.dataset.tab===saved)) activate(saved); else activate('week');
-})();
-</script>
-
-<script>
-(function(){
-  // Real-time nutrition updater
-  const panel=document.getElementById('statsPanel');
-  const refreshBtn=document.getElementById('statsRefreshBtn');
-  const autoChk=document.getElementById('statsAutoRefresh');
-  if(!panel) return;
-  const week=panel.getAttribute('data-week');
-  const year=panel.getAttribute('data-year');
-  const weekCal=document.getElementById('stats-week-cal');
-  const weekPro=document.getElementById('stats-week-pro');
-  const weekCarbs=document.getElementById('stats-week-carbs');
-  const weekFats=document.getElementById('stats-week-fats');
-  const daysBody=document.getElementById('statsDaysBody');
-  let timer=null;
-
-  function applyNutrition(data){
-    if(!data) return;
-    const wt=data.week_totals||{};
-    if(weekCal) weekCal.textContent = wt.calories ?? 0;
-    if(weekPro) weekPro.textContent = wt.protein ?? 0;
-    if(weekCarbs) weekCarbs.textContent = wt.carbs ?? wt.carbohydrates ?? 0;
-    if(weekFats) weekFats.textContent = wt.fats ?? wt.fat ?? 0;
-    if(daysBody){
-      const days=data.days||{};
-      // Build set of existing row day names
-      const existing=new Set();
-      daysBody.querySelectorAll('tr').forEach(r=>existing.add(r.getAttribute('data-day')));
-      // Add missing rows
-      Object.keys(days).forEach(dayName=>{
-        if(!existing.has(dayName)){
-          const tr=document.createElement('tr');
-          tr.setAttribute('data-day',dayName);
-          tr.innerHTML=`<td class="sd-name"></td><td class="sd-cal"></td><td class="sd-pro"></td><td class="sd-carbs"></td><td class="sd-fats"></td>`;
-          daysBody.appendChild(tr);
-        }
-      });
-      // Update each row
-      daysBody.querySelectorAll('tr').forEach(r=>{
-        const dn=r.getAttribute('data-day');
-        const obj=days[dn];
-        if(!obj){ r.querySelector('.sd-cal').textContent='0'; r.querySelector('.sd-pro').textContent='0'; r.querySelector('.sd-carbs').textContent='0'; r.querySelector('.sd-fats').textContent='0'; return; }
-        r.querySelector('.sd-name').textContent=dn;
-        r.querySelector('.sd-cal').textContent=obj.calories ?? 0;
-        r.querySelector('.sd-pro').textContent=obj.protein ?? 0;
-        r.querySelector('.sd-carbs').textContent=obj.carbs ?? 0;
-        r.querySelector('.sd-fats').textContent=obj.fats ?? 0;
-      });
-    }
-  }
-  let inflight=false;
-  async function fetchNutrition(){
-    if(inflight) return; inflight=true;
-    panel.classList.add('refreshing');
-    try {
-      const resp=await fetch(`/api/nutrition?week=${week}&year=${year}`, {cache:'no-store'});
-      if(resp.ok){
-        const data=await resp.json();
-        applyNutrition(data);
-      }
-    } catch(e){ console.warn('Nutrition fetch failed', e); }
-    finally { inflight=false; panel.classList.remove('refreshing'); }
-  }
-  function schedule(){
-    if(timer) clearTimeout(timer);
-    if(autoChk && autoChk.checked){
-      timer=setTimeout(()=>{ fetchNutrition().then(schedule); }, 30000);
-    }
-  }
-  if(refreshBtn) refreshBtn.addEventListener('click', ()=>{ fetchNutrition(); schedule(); });
-  if(autoChk) autoChk.addEventListener('change', ()=> schedule());
-  // Expose for other scripts (e.g., after meal update via AJAX in future)
-  window.refreshNutritionPanel = () => { fetchNutrition(); schedule(); };
-  // Initial schedule (small delay so initial paint stable)
-  setTimeout(()=>{ schedule(); }, 4000);
-})();
-</script>
-<script>
-// PATCH: dynamic total + bulk delete support injected
-(function(){
-  const PANEL_KEY = 'alertsPanelHidden';
-  const TAB_KEY = 'alertsActiveTab';
-  const panel = document.getElementById('alertsPanel');
-  const btn = document.getElementById('alertsMainBtn');
-  if(!panel || !btn) return;
-  function getCurrentTotal(){
-    const badge = document.getElementById('alertsPanelTotal');
-    if(badge) return parseInt(badge.textContent||'0',10)||0;
-    const attr = btn.getAttribute('data-total');
-    return parseInt(attr||'0',10)||0;
-  }
-  // Replace original setButtonLabel logic if already defined
-  // We rely on existing open/close script loaded earlier; if not, this still handles button label updates.
-  function setButtonLabel(open){
-    const total = getCurrentTotal();
-    if(open){
-      btn.innerHTML = 'Alerts (<span id="alertsTotalBadge">'+ total +'</span>)';
-    } else {
-      btn.textContent = 'Show alerts';
-      btn.setAttribute('data-total', String(total));
-    }
-  }
-  // Expose for other scripts (optional)
-  window.__updateAlertsButton = setButtonLabel;
-
-  // Bulk delete logic
-  const bulkBtn = document.getElementById('bulkDeleteExp');
-  const selectAll = document.getElementById('expSelectAll');
-  function updateBulkState(){
-    if(!bulkBtn) return;
-    const checks = Array.from(document.querySelectorAll('.exp-select'));
-    const selected = checks.filter(c=>c.checked);
-    bulkBtn.disabled = selected.length === 0;
-    if(selectAll){
-      const all = selected.length && selected.length === checks.length;
-      selectAll.checked = all;
-      selectAll.indeterminate = selected.length>0 && selected.length < checks.length;
-    }
-  }
-  document.addEventListener('change', (e)=>{
-    if(e.target && e.target.classList && e.target.classList.contains('exp-select')) updateBulkState();
-    if(e.target === selectAll){
-      const val = selectAll.checked;
-      document.querySelectorAll('.exp-select').forEach(cb=> cb.checked = val);
-      updateBulkState();
-    }
-  });
-  if(bulkBtn){
-    bulkBtn.addEventListener('click', async ()=>{
-      const names = Array.from(document.querySelectorAll('.exp-select:checked')).map(c=>c.getAttribute('data-name')).filter(Boolean);
-      if(!names.length) return;
-      if(!confirm('Delete selected expiring ingredients?')) return;
-      try {
-        const resp = await fetch('/api/pantry/ingredients/bulk-delete', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({names})});
-        if(!resp.ok){ alert('Delete failed'); return; }
-        const data = await resp.json();
-        data.deleted.forEach(n=>{
-          const row = document.querySelector(`tr[data-name="${CSS.escape(n)}"]`);
-          if(row) row.remove();
-        });
-        // Recompute counts
-        const expRows = document.querySelectorAll('.exp-select').length; // remaining expiring rows
-        const lowRows = document.querySelectorAll('[data-content="lowstock"] tbody tr').length;
-        const totalBadge = document.getElementById('alertsPanelTotal');
-        if(totalBadge){ totalBadge.textContent = String(expRows + lowRows); }
-        const expTab = document.getElementById('expTabCount'); if(expTab) expTab.textContent = String(expRows);
-        if(expRows === 0){
-          const expList = document.querySelector('.alerts-list[data-content="expiring"]');
-          if(expList) expList.style.display='none';
-          // Switch to lowstock tab if exists
-          const lowTabBtn = document.querySelector('.alerts-tab[data-tab="lowstock"]');
-          if(lowTabBtn){ lowTabBtn.click(); }
-        }
-        // Update button label if panel open
-        if(panel.classList.contains('open')) setButtonLabel(true); else setButtonLabel(false);
-        updateBulkState();
-      } catch(err){ console.error(err); alert('Unexpected error'); }
-    });
-    updateBulkState();
-  }
-})();
-</script>
+<script src="/static/script.js?ts={{ time }}"></script>
+<script src="/static/week_controls.js?ts={{ time }}"></script>
+<script src="/static/cleanup_index.js?ts={{ time }}"></script>
 </body>
 </html>

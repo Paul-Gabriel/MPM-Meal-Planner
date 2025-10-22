@@ -604,5 +604,54 @@
         "exp_date": "25-10-2025"
       }
     ]
+  },
+  {
+    "id": "adadb41e-fe39-44e9-9c3a-1ca97471ff8f",
+    "timestamp": "2025-10-22T01:17:15.474761",
+    "week": 43,
+    "merged": [],
+    "added": [
+      {
+        "name": "Tomato",
+        "quantity": 6,
+        "exp_date": "29-10-2025"
+      }
+    ]
+  },
+  {
+    "id": "a70fc1c7-4670-44d9-bb2a-ef42f296d61b",
+    "timestamp": "2025-10-22T02:16:15.315787",
+    "week": 43,
+    "merged": [],
+    "added": [
+      {
+        "name": "Vegetable stock",
+        "quantity": 500,
+        "exp_date": "29-10-2025"
+      }
+    ]
+  },
+  {
+    "id": "88148cb2-c90b-46d0-b865-b50455938bb9",
+    "timestamp": "2025-10-22T03:09:30.752030",
+    "week": 43,
+    "merged": [],
+    "added": [
+      {
+        "name": "Chicken breast",
+        "quantity": 1000,
+        "exp_date": "29-10-2025"
+      },
+      {
+        "name": "Coconut milk",
+        "quantity": 800,
+        "exp_date": "29-10-2025"
+      },
+      {
+        "name": "Curry paste",
+        "quantity": 100,
+        "exp_date": "29-10-2025"
+      }
+    ]
   }
 ]

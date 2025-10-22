@@ -118,12 +118,12 @@ def main_page(request: Request, week: Optional[int] = Query(default=None), year:
     nutrition = compute_week_nutrition(plan, recipes)
 
     notice_map = {
-        "reset": "Săptămâna a fost resetată.",
-        "random": "Săptămâna a fost randomizată.",
+        "reset": "Week has been changed to default.",
+        "random": "Week has been randomized.",
     }
     notice_message = notice_map.get(notice)
     if notice_message and chg is not None:
-        notice_message = f"{notice_message} (Sloturi modificate: {chg})"
+        notice_message = f"{notice_message} (Changed slots: {chg})"
     return templates.TemplateResponse(
         "index.html",
         {
